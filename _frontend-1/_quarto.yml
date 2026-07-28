@@ -1,0 +1,54 @@
+project:
+  type: website
+  output-dir: _site
+  post-render:
+    - scripts/copy-primer-html.R
+  render:
+    # Explicit list — every page individually. No wildcards, no auto-discovery.
+    - content/index.qmd
+    - content/project/mission.qmd
+    - content/project/method.qmd
+    - content/project/glossary.qmd
+    - content/pipeline/pipeline-guide.qmd
+    - content/pipeline/cache-manifest.qmd
+    - content/pipeline/input-manifest.qmd
+    - content/primers/data-primer-1.qmd
+    - content/site-map.qmd
+
+website:
+  title: "Maelstrom Harmonization"
+  site-url: "https://github.com/RG-FIDES/maelstrom"
+  navbar:
+    left:
+      - text: "Project"
+        menu:
+          - text: "Mission"
+            href: content/project/mission.qmd
+          - text: "Method"
+            href: content/project/method.qmd
+          - text: "Glossary"
+            href: content/project/glossary.qmd
+      - text: "Pipeline"
+        menu:
+          - text: "Pipeline Guide"
+            href: content/pipeline/pipeline-guide.qmd
+          - text: "Cache Manifest"
+            href: content/pipeline/cache-manifest.qmd
+          - text: "Input Manifest"
+            href: content/pipeline/input-manifest.qmd
+      - text: "Primers"
+        menu:
+          - text: "Data Primer 1"
+            href: content/primers/data-primer-1.qmd
+      - text: "Site Map"
+        href: content/site-map.qmd
+  repo-url: "https://github.com/RG-FIDES/maelstrom"
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    mermaid:
+      theme: neutral
+
+editor: source

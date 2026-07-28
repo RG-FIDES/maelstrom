@@ -1,3 +1,6 @@
+# ---- frontend -----------------------
+_frontend-*/_site/
+
 # ---- R and RStudio files -----------------------------------------------
 .Rproj.user/
 .Rhistory

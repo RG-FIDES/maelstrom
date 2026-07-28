@@ -1,0 +1,12 @@
+---
+title: "Data Primer 1 — The Maelstrom Harmonization Analytic Store"
+format:
+  html:
+    page-layout: full
+    toc: false
+---
+
+<meta http-equiv="refresh" content="0; url=../../reports/data-primer-1.html">
+
+If you are not redirected automatically,
+[open Data Primer 1](../../reports/data-primer-1.html).

@@ -1,0 +1,79 @@
+---
+title: "Site Map"
+---
+
+Every page on this site is produced by one of four mechanisms. Knowing which one
+applies tells you how much of the page was written by a person, how much was
+carried over unchanged from the repository, and where to look for the original.
+
+## Output Types
+
+| Type | Meaning |
+|------|----------|
+| **VERBATIM** | Source `.md` morphed to `.qmd` with YAML frontmatter added; content preserved exactly |
+| **COMPOSED** | Authored by the Publishing Writer; synthesized from one or more raw sources per the contract brief |
+| **ADAPTED** | Source `.md`/`.qmd` transformed with non-editorial Technical Bridge operations (for example link rewriting, include injection, section exclusions, and sanitization), with all transforms documented in `TRANSFORM_LOG.md` |
+| **REDIRECT** | Transit `.qmd` stub that forwards the browser to a standalone rendered HTML file |
+
+## Navigation Structure
+
+```text
+Maelstrom Harmonization
+│
+├── 🏠  Index                        COMPOSED  ← mission, pipeline guide, and both
+│                                              manifests; absent from the navbar
+│
+├── Project
+│   ├── Mission                      VERBATIM  ← ai/project/mission.md
+│   ├── Method                       VERBATIM  ← ai/project/method.md
+│   └── Glossary                     VERBATIM  ← ai/project/glossary.md
+│
+├── Pipeline
+│   ├── Pipeline Guide               ADAPTED   ← manipulation/pipeline.md
+│   │                                            (transforms: shortcode_injection,
+│   │                                            sanitize, extension_promotion,
+│   │                                            frontmatter_add)
+│   ├── Cache Manifest               VERBATIM  ← data-public/metadata/CACHE-manifest.md
+│   └── Input Manifest               VERBATIM  ← data-public/metadata/INPUT-manifest.md
+│
+├── Primers
+│   └── Data Primer 1                REDIRECT  → reports/data-primer-1.html
+│
+└── Site Map                         COMPOSED  ← this site's publishing contract
+```
+
+## Source File Provenance
+
+| Page | Output type | Source in repository |
+|------|-------------|----------------------|
+| Index | COMPOSED | `ai/project/mission.md`, `manipulation/pipeline.md`, `data-public/metadata/INPUT-manifest.md`, `data-public/metadata/CACHE-manifest.md`, `manipulation/images/pipeline-architecture.png` |
+| Mission | VERBATIM | `ai/project/mission.md` |
+| Method | VERBATIM | `ai/project/method.md` |
+| Glossary | VERBATIM | `ai/project/glossary.md` |
+| Pipeline Guide | ADAPTED | `manipulation/pipeline.md` |
+| Cache Manifest | VERBATIM | `data-public/metadata/CACHE-manifest.md` |
+| Input Manifest | VERBATIM | `data-public/metadata/INPUT-manifest.md` |
+| Data Primer 1 | REDIRECT | `analysis/data-primer-1/data-primer-1.html` |
+| Site Map | COMPOSED | `_frontend-1/publishing-contract.prompt.md` |
+
+## Build System
+
+The site is a static Quarto project with an explicit render list — every page is named
+individually; nothing is discovered by wildcard.
+
+One post-render hook runs after Quarto finishes:
+
+| Script | Hook | Purpose |
+|--------|------|---------|
+| `scripts/copy-primer-html.R` | post-render | Copies the standalone Data Primer 1 HTML into the rendered site so the Primers redirect resolves |
+
+The Pipeline Guide's architecture diagram is rendered from a Mermaid partial
+(`_mermaid-pipeline.qmd`) extracted from the source document, so the diagram on that
+page stays tied to the pipeline's own documentation. The home page uses a pre-rendered
+PNG of the same diagram.
+
+## Not Yet Present
+
+There is no Analysis section. The repository's first substantive exploratory analysis
+has not been composed; this frontend was built to be extended, and an Analysis entry
+will sit between Pipeline and Primers when that work exists.
