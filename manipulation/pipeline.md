@@ -186,30 +186,34 @@ SELECT
 
 ## Current Baseline
 
-The first complete extraction on 2026-07-27 produced:
+The extraction on 2026-07-28 produced:
 
-| Entity | Rows |
-| --- | ---: |
-| Individual studies | 455 |
-| Study populations | 998 |
-| Data collection events | 6,482 |
-| Investigator and contact memberships | 2,199 |
-| Study attributes | 1,628 |
-| Event data-source terms | 14,345 |
-| Event biosample terms | 4,585 |
+| Entity | Rows | Change since 2026-07-27 |
+| --- | ---: | ---: |
+| Individual studies | 455 | — |
+| Study populations | 998 | — |
+| Data collection events | 6,483 | +1 |
+| Investigator and contact memberships | 2,199 | — |
+| Study attributes | 1,628 | — |
+| Event data-source terms | 14,347 | +2 |
+| Event biosample terms | 4,585 | — |
 
 These counts are diagnostic baselines rather than permanent expectations. Changes in the
 public catalogue should be preserved and investigated, not forced back to these values.
 The machine-readable form of this baseline is `ontology-tables.csv`; diff it after a run
 to see exactly what moved.
 
-The first complete Ellis run on 2026-07-28 produced:
+The drift above is the first observed instance of exactly that: one data collection event
+and two of its data-source terms appeared in the catalogue overnight. Nothing in the
+pipeline resisted it, and nothing had to be edited to accept it.
+
+The Ellis run on 2026-07-28 produced:
 
 | Object | Rows |
 | --- | ---: |
 | `study_profile` | 455 |
 | `study_population` | 998 |
-| `study_wave` | 6,482 |
+| `study_wave` | 6,483 |
 | `study_domain` | 8,190 |
 | `screening_evidence` | 1,025 |
 | `concept_lexicon` | 37 |

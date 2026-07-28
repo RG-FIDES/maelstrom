@@ -5,7 +5,7 @@ produced by the Ferry lane `manipulation/0-ferry-extract.R`. It is the authorita
 description of what an Ellis lane may consume.
 
 > **Status**: Populated — profiled 2026-07-28 UTC from Ferry run
-> `maelstrom-20260727T174615` (completed 2026-07-27 17:47:32 UTC).
+> `maelstrom-20260728T021329` (completed 2026-07-28 02:14:49 UTC).
 
 ## Output Summary
 
@@ -15,11 +15,11 @@ description of what an Ellis lane may consume.
 | Base URL | `https://www.maelstrom-research.org` |
 | Staging database | `data-private/derived/maelstrom/maelstrom-catalog.sqlite` |
 | Config key | `database.maelstrom_catalog.staging` |
-| Database size | 33,464,320 bytes |
+| Database size | 33,472,512 bytes |
 | SQLite version | 3.53.1 |
 | Tables | 12 |
 | Columns (all tables) | 124 |
-| Rows (all tables) | 34,781 |
+| Rows (all tables) | 34,784 |
 | Individual studies | 455 |
 | Authentication | None; all endpoints are public |
 
@@ -138,8 +138,8 @@ erDiagram
 | 5 | `study_populations` | One row per run, study, and population | 998 | 17 | `run_id`, `study_id`, `population_id` |
 | 5 | `population_countries` | One row per population and country | 1,127 | 4 | None declared |
 | 5 | `population_recruitment_terms` | One row per population and recruitment term | 2,051 | 5 | None declared |
-| 6 | `data_collection_events` | One row per population and event | 6,482 | 11 | `run_id`, `study_id`, `population_id`, `dce_id` |
-| 6 | `dce_data_sources` | One row per event and data-source term | 14,345 | 5 | None declared |
+| 6 | `data_collection_events` | One row per population and event | 6,483 | 11 | `run_id`, `study_id`, `population_id`, `dce_id` |
+| 6 | `dce_data_sources` | One row per event and data-source term | 14,347 | 5 | None declared |
 | 6 | `dce_biosamples` | One row per event and biosample term | 4,585 | 5 | None declared |
 
 ---
@@ -165,7 +165,7 @@ No orphan rows exist anywhere in the database: every child row resolves to a par
 the same run.
 
 > **Warning — composite keys are mandatory.** `population_id` takes only 39 distinct values
-> across 998 rows, and `dce_id` only 88 distinct values across 6,482 rows. These identifiers
+> across 998 rows, and `dce_id` only 88 distinct values across 6,483 rows. These identifiers
 > are sequence labels local to their parent, not global keys. Any join must carry the full
 > key path (`run_id`, `study_id`, `population_id`, `dce_id`); joining on `dce_id` alone will
 > silently produce a Cartesian result.
@@ -257,7 +257,7 @@ enrolled group.
 
 ## Group 6 — Event Layer
 
-`data_collection_events` (6,482 rows) is the temporal spine — median 4 events per
+`data_collection_events` (6,483 rows) is the temporal spine — median 4 events per
 population, maximum 83.
 
 | Column | Fill Rate | Observed Range |
@@ -271,8 +271,8 @@ population, maximum 83.
 > data errors. An Ellis lane computing observed follow-up depth must decide explicitly
 > whether to censor at the extraction date.
 
-`dce_data_sources` (14,345 rows) and `dce_biosamples` (4,585 rows) record which instrument
-families and specimen types each event produced. 3,432 of 6,482 events list no biosample.
+`dce_data_sources` (14,347 rows) and `dce_biosamples` (4,585 rows) record which instrument
+families and specimen types each event produced. 3,433 of 6,483 events list no biosample.
 
 ---
 

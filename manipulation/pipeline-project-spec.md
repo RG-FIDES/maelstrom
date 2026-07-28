@@ -17,7 +17,7 @@ decline.
 | Source type | Public JSON API |
 | Inventory endpoint | `/ws/studies/_rql` |
 | Detail endpoint | `/ws/study/{study_id}` |
-| Declared individual-study count | 455 as observed on 2026-07-27 |
+| Declared individual-study count | 455 as observed on 2026-07-28 |
 | Authentication | None required for the public endpoints used here |
 
 The inventory query restricts records to `Mica_study.className = Study`. Harmonization
@@ -136,7 +136,7 @@ Every complete Ferry run must satisfy these checks:
 - the extraction run finishes with `status = 'completed'`;
 - no `.building` file remains after successful promotion.
 
-The observed baseline on 2026-07-27 is 455 individual studies. This is a source
+The observed baseline on 2026-07-28 is 455 individual studies. This is a source
 observation, not a hard-coded invariant: future runs must preserve the current API total
 and report changes.
 
@@ -241,7 +241,7 @@ All stable-contract artifacts now exist:
 
 | Artifact | Status |
 | --- | --- |
-| `data-public/metadata/INPUT-manifest.md` | Populated from the 2026-07-27 Ferry run |
+| `data-public/metadata/INPUT-manifest.md` | Populated from the 2026-07-28 Ferry run |
 | `data-public/metadata/CACHE-manifest.md` | Populated from the 2026-07-28 Ellis run |
 | `manipulation/pipeline-validation.dcf` | Bound to `data-private/derived/ellis/study_profile.parquet` |
 | `manipulation/1-ellis-1.R` | Active |

@@ -1,7 +1,7 @@
 "table_group","table_name","column_position","column_name","declared_type","is_primary_key","is_opaque_payload","n_rows","n_non_null","fill_rate","n_distinct","min_value","max_value","example_value"
-"1-run-provenance","extraction_runs",1,"run_id","TEXT",1,0,1,1,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
-"1-run-provenance","extraction_runs",2,"started_at_utc","TEXT",0,0,1,1,1,1,"2026-07-27 17:46:15 UTC","2026-07-27 17:46:15 UTC","2026-07-27 17:46:15 UTC"
-"1-run-provenance","extraction_runs",3,"completed_at_utc","TEXT",0,0,1,1,1,1,"2026-07-27 17:47:32 UTC","2026-07-27 17:47:32 UTC","2026-07-27 17:47:32 UTC"
+"1-run-provenance","extraction_runs",1,"run_id","TEXT",1,0,1,1,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
+"1-run-provenance","extraction_runs",2,"started_at_utc","TEXT",0,0,1,1,1,1,"2026-07-28 02:13:29 UTC","2026-07-28 02:13:29 UTC","2026-07-28 02:13:29 UTC"
+"1-run-provenance","extraction_runs",3,"completed_at_utc","TEXT",0,0,1,1,1,1,"2026-07-28 02:14:49 UTC","2026-07-28 02:14:49 UTC","2026-07-28 02:14:49 UTC"
 "1-run-provenance","extraction_runs",4,"base_url","TEXT",0,0,1,1,1,1,"https://www.maelstrom-research.org","https://www.maelstrom-research.org","https://www.maelstrom-research.org"
 "1-run-provenance","extraction_runs",5,"inventory_url","TEXT",0,0,1,1,1,1,"https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study...","https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study...","https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study..."
 "1-run-provenance","extraction_runs",6,"requested_max_studies","INTEGER",0,0,1,0,0,0,,,
@@ -11,7 +11,7 @@
 "1-run-provenance","extraction_runs",10,"extracted_detail_studies","INTEGER",0,0,1,1,1,1,"455","455","455"
 "1-run-provenance","extraction_runs",11,"status","TEXT",0,0,1,1,1,1,"completed","completed","completed"
 "1-run-provenance","extraction_runs",12,"notes","TEXT",0,0,1,0,0,0,,,
-"2-raw-payload","study_inventory",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"2-raw-payload","study_inventory",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "2-raw-payload","study_inventory",2,"inventory_rank","INTEGER",0,0,455,455,1,455,"1","455","1"
 "2-raw-payload","study_inventory",3,"study_id","TEXT",1,0,455,455,1,455,"3d","zulu","3d"
 "2-raw-payload","study_inventory",4,"source_url","TEXT",0,0,455,455,1,10,"https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study...","https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study...","https://www.maelstrom-research.org/ws/studies/_rql?query=study%28in%28Mica_study..."
@@ -24,12 +24,12 @@
 "2-raw-payload","study_inventory",11,"target_number","INTEGER",0,0,455,455,1,346,"0","4275000","17198"
 "2-raw-payload","study_inventory",12,"target_no_limit","INTEGER",0,0,455,455,1,2,"0","1","0"
 "2-raw-payload","study_inventory",13,"summary_json","TEXT",0,1,455,455,1,455,,,
-"2-raw-payload","study_detail_raw",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"2-raw-payload","study_detail_raw",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "2-raw-payload","study_detail_raw",2,"study_id","TEXT",1,0,455,455,1,455,"3d","zulu","3d"
 "2-raw-payload","study_detail_raw",3,"source_url","TEXT",0,0,455,455,1,455,"https://www.maelstrom-research.org/ws/study/3d","https://www.maelstrom-research.org/ws/study/zulu","https://www.maelstrom-research.org/ws/study/bcs70"
-"2-raw-payload","study_detail_raw",4,"fetched_at_utc","TEXT",0,0,455,455,1,68,"2026-07-27 17:46:23 UTC","2026-07-27 17:47:30 UTC","2026-07-27 17:46:23 UTC"
+"2-raw-payload","study_detail_raw",4,"fetched_at_utc","TEXT",0,0,455,455,1,68,"2026-07-28 02:13:40 UTC","2026-07-28 02:14:47 UTC","2026-07-28 02:13:40 UTC"
 "2-raw-payload","study_detail_raw",5,"payload_json","TEXT",0,1,455,455,1,455,,,
-"3-study-core","studies",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"3-study-core","studies",1,"run_id","TEXT",1,0,455,455,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "3-study-core","studies",2,"study_id","TEXT",1,0,455,455,1,455,"3d","zulu","3d"
 "3-study-core","studies",3,"published","INTEGER",0,0,455,455,1,1,"1","1","1"
 "3-study-core","studies",4,"study_resource_path","TEXT",0,0,455,455,1,1,"individual-study","individual-study","individual-study"
@@ -38,7 +38,7 @@
 "3-study-core","studies",7,"objectives_html_en","TEXT",0,1,455,455,1,455,,,
 "3-study-core","studies",8,"website_url","TEXT",0,0,455,346,0.7604,307,"","www.snacnordanstig.se","https://cls.ucl.ac.uk/cls-studies/1970-british-cohort-study/"
 "3-study-core","studies",9,"design_code","TEXT",0,0,455,455,1,7,"case_control","registry","case_control"
-"3-study-core","studies",10,"follow_up_info_html_en","TEXT",0,1,455,421,0.9253,404,,,
+"3-study-core","studies",10,"follow_up_info_html_en","TEXT",0,1,455,421,0.9253,405,,,
 "3-study-core","studies",11,"methods_info_html_en","TEXT",0,1,455,175,0.3846,125,,,
 "3-study-core","studies",12,"start_year","INTEGER",0,0,455,455,1,73,"1920","2026","1970"
 "3-study-core","studies",13,"recruitment_target","TEXT",0,0,455,455,1,6,"","other","individuals"
@@ -58,7 +58,7 @@
 "3-study-core","studies",27,"marker_paper","TEXT",0,0,455,311,0.6835,291,"","van Lenthe FJ, Kamphuis CB, Beenackers MA, Jansen T, Looman CW, Nusselder WJ, Ma...","Elliott J, Shepherd P. Cohort profile: 1970 British Birth Cohort (BCS70). Intern..."
 "3-study-core","studies",28,"pubmed_id","TEXT",0,0,455,271,0.5956,255,"","9875839","16931528"
 "3-study-core","studies",29,"content_json","TEXT",0,1,455,455,1,455,,,
-"4-study-context","study_memberships",1,"run_id","TEXT",0,0,2199,2199,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"4-study-context","study_memberships",1,"run_id","TEXT",0,0,2199,2199,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "4-study-context","study_memberships",2,"study_id","TEXT",0,0,2199,2199,1,454,"3d","zulu","bcs70"
 "4-study-context","study_memberships",3,"membership_role","TEXT",0,0,2199,2199,1,2,"contact","investigator","contact"
 "4-study-context","study_memberships",4,"member_id","TEXT",0,0,2199,2199,1,1565,"56549150e4b01078388690b9","6a3f42d63a0b6f3a1198dc2e","56549160e4b010783886926c"
@@ -72,11 +72,11 @@
 "4-study-context","study_memberships",12,"city_en","TEXT",0,0,2199,1948,0.8859,219,"Aarau","Zürich","London"
 "4-study-context","study_memberships",13,"country_iso","TEXT",0,0,2199,2063,0.9382,50,"ALB","ZAF","GBR"
 "4-study-context","study_memberships",14,"member_json","TEXT",0,1,2199,2199,1,1727,,,
-"4-study-context","study_attributes",1,"run_id","TEXT",0,0,1628,1628,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"4-study-context","study_attributes",1,"run_id","TEXT",0,0,1628,1628,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "4-study-context","study_attributes",2,"study_id","TEXT",0,0,1628,1628,1,201,"50ymg","zulu","bcs70"
 "4-study-context","study_attributes",3,"attribute_namespace","TEXT",0,0,1628,1628,1,1,"Mlstr_area","Mlstr_area","Mlstr_area"
 "4-study-context","study_attributes",4,"attribute_name","TEXT",0,0,1628,1628,1,18,"Administrative_information","Symptoms_signs","Administrative_information"
-"5-population-layer","study_populations",1,"run_id","TEXT",1,0,998,998,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"5-population-layer","study_populations",1,"run_id","TEXT",1,0,998,998,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "5-population-layer","study_populations",2,"study_id","TEXT",1,0,998,998,1,455,"3d","zulu","3d"
 "5-population-layer","study_populations",3,"population_id","TEXT",1,0,998,998,1,39,"1","t-n","1"
 "5-population-layer","study_populations",4,"display_order","INTEGER",0,0,998,998,1,20,"0","19","0"
@@ -93,32 +93,32 @@
 "5-population-layer","study_populations",15,"twins","INTEGER",0,0,998,998,1,2,"0","1","0"
 "5-population-layer","study_populations",16,"territory_html_en","TEXT",0,1,998,848,0.8497,286,,,
 "5-population-layer","study_populations",17,"content_json","TEXT",0,1,998,998,1,973,,,
-"5-population-layer","population_countries",1,"run_id","TEXT",0,0,1127,1127,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"5-population-layer","population_countries",1,"run_id","TEXT",0,0,1127,1127,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "5-population-layer","population_countries",2,"study_id","TEXT",0,0,1127,1127,1,455,"3d","zulu","bcs70"
 "5-population-layer","population_countries",3,"population_id","TEXT",0,0,1127,1127,1,39,"1","t-n","1"
 "5-population-layer","population_countries",4,"country_iso","TEXT",0,0,1127,1127,1,61,"ALB","ZAF","ALB"
-"5-population-layer","population_recruitment_terms",1,"run_id","TEXT",0,0,2051,2051,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"5-population-layer","population_recruitment_terms",1,"run_id","TEXT",0,0,2051,2051,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "5-population-layer","population_recruitment_terms",2,"study_id","TEXT",0,0,2051,2051,1,452,"3d","zulu","bcs70"
 "5-population-layer","population_recruitment_terms",3,"population_id","TEXT",0,0,2051,2051,1,38,"1","t-n","1"
 "5-population-layer","population_recruitment_terms",4,"term_group","TEXT",0,0,2051,2051,1,3,"data_sources","specific_population_sources","data_sources"
 "5-population-layer","population_recruitment_terms",5,"term_value","TEXT",0,0,2051,2051,1,9,"clinic_patients","volunteer","exist_studies"
-"6-event-layer","data_collection_events",1,"run_id","TEXT",1,0,6482,6482,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
-"6-event-layer","data_collection_events",2,"study_id","TEXT",1,0,6482,6482,1,455,"3d","zulu","3d"
-"6-event-layer","data_collection_events",3,"population_id","TEXT",1,0,6482,6482,1,39,"1","t-n","1"
-"6-event-layer","data_collection_events",4,"dce_id","TEXT",1,0,6482,6482,1,88,"0","r","1"
-"6-event-layer","data_collection_events",5,"display_order","INTEGER",0,0,6482,6482,1,83,"0","82","0"
-"6-event-layer","data_collection_events",6,"name_en","TEXT",0,0,6482,6482,1,6189,"10-day follow up period","seroMARK-VR - non-Black Canadians - 0-30 days pre-dose 1","BCS 1970 - Birth survey"
-"6-event-layer","data_collection_events",7,"description_html_en","TEXT",0,1,6482,6481,0.9998,3195,,,
-"6-event-layer","data_collection_events",8,"start_year","INTEGER",0,0,6482,6482,1,98,"1920","2032","1970"
-"6-event-layer","data_collection_events",9,"end_year","INTEGER",0,0,6482,5692,0.8781,95,"1922","2035","1970"
-"6-event-layer","data_collection_events",10,"other_data_sources_html_en","TEXT",0,1,6482,1105,0.1705,181,,,
-"6-event-layer","data_collection_events",11,"content_json","TEXT",0,1,6482,6482,1,1747,,,
-"6-event-layer","dce_data_sources",1,"run_id","TEXT",0,0,14345,14345,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
-"6-event-layer","dce_data_sources",2,"study_id","TEXT",0,0,14345,14345,1,455,"3d","zulu","bcs70"
-"6-event-layer","dce_data_sources",3,"population_id","TEXT",0,0,14345,14345,1,39,"1","t-n","1"
-"6-event-layer","dce_data_sources",4,"dce_id","TEXT",0,0,14345,14345,1,88,"0","r","1"
-"6-event-layer","dce_data_sources",5,"data_source_code","TEXT",0,0,14345,14345,1,6,"administratives_databases","questionnaires","administratives_databases"
-"6-event-layer","dce_biosamples",1,"run_id","TEXT",0,0,4585,4585,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615"
+"6-event-layer","data_collection_events",1,"run_id","TEXT",1,0,6483,6483,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
+"6-event-layer","data_collection_events",2,"study_id","TEXT",1,0,6483,6483,1,455,"3d","zulu","3d"
+"6-event-layer","data_collection_events",3,"population_id","TEXT",1,0,6483,6483,1,39,"1","t-n","1"
+"6-event-layer","data_collection_events",4,"dce_id","TEXT",1,0,6483,6483,1,88,"0","r","1"
+"6-event-layer","data_collection_events",5,"display_order","INTEGER",0,0,6483,6483,1,83,"0","82","0"
+"6-event-layer","data_collection_events",6,"name_en","TEXT",0,0,6483,6483,1,6190,"10-day follow up period","seroMARK-VR - non-Black Canadians - 0-30 days pre-dose 1","BCS 1970 - Birth survey"
+"6-event-layer","data_collection_events",7,"description_html_en","TEXT",0,1,6483,6482,0.9998,3196,,,
+"6-event-layer","data_collection_events",8,"start_year","INTEGER",0,0,6483,6483,1,98,"1920","2032","1970"
+"6-event-layer","data_collection_events",9,"end_year","INTEGER",0,0,6483,5693,0.8781,95,"1922","2035","1970"
+"6-event-layer","data_collection_events",10,"other_data_sources_html_en","TEXT",0,1,6483,1105,0.1704,181,,,
+"6-event-layer","data_collection_events",11,"content_json","TEXT",0,1,6483,6483,1,1747,,,
+"6-event-layer","dce_data_sources",1,"run_id","TEXT",0,0,14347,14347,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
+"6-event-layer","dce_data_sources",2,"study_id","TEXT",0,0,14347,14347,1,455,"3d","zulu","bcs70"
+"6-event-layer","dce_data_sources",3,"population_id","TEXT",0,0,14347,14347,1,39,"1","t-n","1"
+"6-event-layer","dce_data_sources",4,"dce_id","TEXT",0,0,14347,14347,1,88,"0","r","1"
+"6-event-layer","dce_data_sources",5,"data_source_code","TEXT",0,0,14347,14347,1,6,"administratives_databases","questionnaires","administratives_databases"
+"6-event-layer","dce_biosamples",1,"run_id","TEXT",0,0,4585,4585,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329"
 "6-event-layer","dce_biosamples",2,"study_id","TEXT",0,0,4585,4585,1,308,"3d","y2k","bcs70"
 "6-event-layer","dce_biosamples",3,"population_id","TEXT",0,0,4585,4585,1,33,"1","Venezuela","1"
 "6-event-layer","dce_biosamples",4,"dce_id","TEXT",0,0,4585,4585,1,87,"0","Wave2","10"

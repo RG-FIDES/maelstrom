@@ -9,6 +9,6 @@
 "studies","study_populations","run_id|study_id","1:N",455,998,455,0,0,1,1,2.19,20
 "study_populations","population_countries","run_id|study_id|population_id","1:N",998,1127,994,4,0,1,1,1.13,25
 "study_populations","population_recruitment_terms","run_id|study_id|population_id","1:N",998,2051,991,7,0,1,2,2.07,6
-"study_populations","data_collection_events","run_id|study_id|population_id","1:N",998,6482,998,0,0,1,4,6.49,83
-"data_collection_events","dce_data_sources","run_id|study_id|population_id|dce_id","1:N",6482,14345,6481,1,0,1,2,2.21,6
-"data_collection_events","dce_biosamples","run_id|study_id|population_id|dce_id","1:N",6482,4585,3050,3432,0,1,1,1.5,6
+"study_populations","data_collection_events","run_id|study_id|population_id","1:N",998,6483,998,0,0,1,4,6.5,83
+"data_collection_events","dce_data_sources","run_id|study_id|population_id|dce_id","1:N",6483,14347,6482,1,0,1,2,2.21,6
+"data_collection_events","dce_biosamples","run_id|study_id|population_id|dce_id","1:N",6483,4585,3050,3433,0,1,1,1.5,6

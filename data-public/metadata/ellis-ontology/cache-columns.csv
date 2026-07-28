@@ -1,10 +1,10 @@
 "table_name","column_name","declared_type","ordinal_position","row_count","n_non_null","fill_rate","n_distinct","min_value","max_value","example_value","is_opaque_payload"
-"ellis_runs","ellis_run_id","TEXT",1,1,1,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
-"ellis_runs","ferry_run_id","TEXT",2,1,1,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615",0
+"ellis_runs","ellis_run_id","TEXT",1,1,1,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
+"ellis_runs","ferry_run_id","TEXT",2,1,1,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329",0
 "ellis_runs","ferry_run_status","TEXT",3,1,1,1,1,"completed","completed","completed",0
-"ellis_runs","ferry_run_completed_at_utc","TEXT",4,1,1,1,1,"2026-07-27 17:47:32 UTC","2026-07-27 17:47:32 UTC","2026-07-27 17:47:32 UTC",0
-"ellis_runs","started_at_utc","TEXT",5,1,1,1,1,"2026-07-28 01:54:34 UTC","2026-07-28 01:54:34 UTC","2026-07-28 01:54:34 UTC",0
-"ellis_runs","completed_at_utc","TEXT",6,1,1,1,1,"2026-07-28 01:54:36 UTC","2026-07-28 01:54:36 UTC","2026-07-28 01:54:36 UTC",0
+"ellis_runs","ferry_run_completed_at_utc","TEXT",4,1,1,1,1,"2026-07-28 02:14:49 UTC","2026-07-28 02:14:49 UTC","2026-07-28 02:14:49 UTC",0
+"ellis_runs","started_at_utc","TEXT",5,1,1,1,1,"2026-07-28 02:19:02 UTC","2026-07-28 02:19:02 UTC","2026-07-28 02:19:02 UTC",0
+"ellis_runs","completed_at_utc","TEXT",6,1,1,1,1,"2026-07-28 02:19:03 UTC","2026-07-28 02:19:03 UTC","2026-07-28 02:19:03 UTC",0
 "ellis_runs","source_db_path","TEXT",7,1,1,1,1,,,,1
 "ellis_runs","target_db_path","TEXT",8,1,1,1,1,,,,1
 "ellis_runs","lexicon_concepts","INTEGER",9,1,1,1,1,"4","4","4",0
@@ -14,28 +14,28 @@
 "ellis_runs","studies_in_frame","INTEGER",13,1,1,1,1,"155","155","155",0
 "ellis_runs","status","TEXT",14,1,1,1,1,"completed","completed","completed",0
 "ellis_runs","notes","TEXT",15,1,0,0,0,,,,1
-"concept_lexicon","ellis_run_id","TEXT",1,37,37,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
+"concept_lexicon","ellis_run_id","TEXT",1,37,37,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
 "concept_lexicon","concept","TEXT",2,37,37,1,4,"ageing","dementia","ageing",0
 "concept_lexicon","concept_weight","REAL",3,37,37,1,4,"0","3","3",0
 "concept_lexicon","term_label","TEXT",4,37,37,1,37,"APOE","white matter","ageing or aging",0
 "concept_lexicon","pattern","TEXT",5,37,37,1,37,,,,1
 "concept_lexicon","match_mode","TEXT",6,37,37,1,2,"substring","word","substring",0
 "concept_lexicon","rationale","TEXT",7,37,37,1,4,,,,1
-"screening_evidence","ellis_run_id","TEXT",1,1025,1025,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
+"screening_evidence","ellis_run_id","TEXT",1,1025,1025,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
 "screening_evidence","study_id","TEXT",2,1025,1025,1,211,"3d","zulu","abc1921",0
 "screening_evidence","concept","TEXT",3,1025,1025,1,4,"ageing","dementia","ageing",0
 "screening_evidence","term_label","TEXT",4,1025,1025,1,35,"APOE","white matter","cognition or cognitive",0
 "screening_evidence","source_field","TEXT",5,1025,1025,1,6,"event_text","study_objectives","event_text",0
 "screening_evidence","n_hits","INTEGER",6,1025,1025,1,53,"1","258","26",0
 "screening_evidence","first_snippet","TEXT",7,1025,1025,1,996,,,,1
-"screening_flow","ellis_run_id","TEXT",1,4,4,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
+"screening_flow","ellis_run_id","TEXT",1,4,4,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
 "screening_flow","step","INTEGER",2,4,4,1,4,"0","3","0",0
 "screening_flow","criterion","TEXT",3,4,4,1,4,,,,1
 "screening_flow","definition","TEXT",4,4,4,1,4,,,,1
 "screening_flow","n_remaining","INTEGER",5,4,4,1,4,"155","455","455",0
 "screening_flow","n_excluded","INTEGER",6,4,4,1,4,"0","283","0",0
-"study_profile","ellis_run_id","TEXT",1,455,455,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
-"study_profile","ferry_run_id","TEXT",2,455,455,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615",0
+"study_profile","ellis_run_id","TEXT",1,455,455,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
+"study_profile","ferry_run_id","TEXT",2,455,455,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329",0
 "study_profile","study_id","TEXT",3,455,455,1,455,"3d","zulu","3d",0
 "study_profile","study_acronym","TEXT",4,455,455,1,451,"10/66","stenoCARDIA","3D",0
 "study_profile","study_name","TEXT",5,455,455,1,455,,,,1
@@ -57,7 +57,7 @@
 "study_profile","first_wave_year","INTEGER",21,455,455,1,73,"1920","2026","2010",0
 "study_profile","last_wave_year","INTEGER",22,455,455,1,52,"1921","2032","2029",0
 "study_profile","follow_up_span_years","INTEGER",23,455,455,1,59,"0","83","19",0
-"study_profile","mean_wave_gap_years","REAL",24,455,375,0.8242,164,"0","67","0.584158415841584",0
+"study_profile","mean_wave_gap_years","REAL",24,455,375,0.8242,165,"0","67","0.584158415841584",0
 "study_profile","n_planned_waves","INTEGER",25,455,455,1,7,"0","26","19",0
 "study_profile","flag_longitudinal","INTEGER",26,455,455,1,2,"0","1","1",0
 "study_profile","flag_repeated_within_population","INTEGER",27,455,455,1,2,"0","1","1",0
@@ -80,7 +80,7 @@
 "study_profile","has_area_diseases","INTEGER",44,455,455,1,2,"0","1","0",0
 "study_profile","has_area_health_status","INTEGER",45,455,455,1,2,"0","1","0",0
 "study_profile","n_events_cognitive","INTEGER",46,455,455,1,30,"0","72","27",0
-"study_profile","prop_events_cognitive","REAL",47,455,455,1,61,"0","1","0.257142857142857",0
+"study_profile","prop_events_cognitive","REAL",47,455,455,1,62,"0","1","0.257142857142857",0
 "study_profile","has_source_cognitive_measures","INTEGER",48,455,455,1,2,"0","1","1",0
 "study_profile","has_source_questionnaires","INTEGER",49,455,455,1,2,"0","1","1",0
 "study_profile","has_source_physical_measures","INTEGER",50,455,455,1,2,"0","1","1",0
@@ -103,7 +103,7 @@
 "study_profile","flag_cognitive_evidence","INTEGER",67,455,455,1,2,"0","1","1",0
 "study_profile","flag_in_frame","INTEGER",68,455,455,1,2,"0","1","0",0
 "study_profile","frame_exclusion_reason","TEXT",69,455,300,0.6593,3,"Fewer than two data collection events","Relevance tier below 'probable'","Relevance tier below 'probable'",0
-"study_population","ellis_run_id","TEXT",1,998,998,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
+"study_population","ellis_run_id","TEXT",1,998,998,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
 "study_population","study_id","TEXT",2,998,998,1,455,"3d","zulu","3d",0
 "study_population","population_id","TEXT",3,998,998,1,39,"1","t-n","1",0
 "study_population","population_order","INTEGER",4,998,998,1,20,"0","19","1",0
@@ -126,36 +126,36 @@
 "study_population","first_wave_year","INTEGER",21,998,998,1,77,"1920","2026","2010",0
 "study_population","last_wave_year","INTEGER",22,998,998,1,57,"1921","2032","2028",0
 "study_population","follow_up_span_years","INTEGER",23,998,998,1,61,"0","83","18",0
-"study_wave","ellis_run_id","TEXT",1,6482,6482,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
-"study_wave","study_id","TEXT",2,6482,6482,1,455,"3d","zulu","3d",0
-"study_wave","population_id","TEXT",3,6482,6482,1,39,"1","t-n","1",0
-"study_wave","dce_id","TEXT",4,6482,6482,1,88,"0","r","1",0
-"study_wave","wave_name","TEXT",5,6482,6482,1,6189,,,,1
-"study_wave","wave_order_study","INTEGER",6,6482,6482,1,193,"1","193","1",0
-"study_wave","wave_order_population","INTEGER",7,6482,6482,1,83,"1","83","1",0
-"study_wave","start_year","INTEGER",8,6482,6482,1,98,"1920","2032","2010",0
-"study_wave","end_year","INTEGER",9,6482,5692,0.8781,95,"1922","2035","2012",0
-"study_wave","duration_years","INTEGER",10,6482,5692,0.8781,41,"-1","68","2",0
-"study_wave","years_since_first_wave","INTEGER",11,6482,6482,1,69,"0","83","0",0
-"study_wave","gap_from_prior_wave_years","INTEGER",12,6482,5484,0.846,27,"0","74","0",0
-"study_wave","n_data_sources","INTEGER",13,6482,6482,1,7,"0","6","4",0
-"study_wave","has_questionnaires","INTEGER",14,6482,6482,1,2,"0","1","1",0
-"study_wave","has_cognitive_measures","INTEGER",15,6482,6482,1,2,"0","1","0",0
-"study_wave","has_physical_measures","INTEGER",16,6482,6482,1,2,"0","1","1",0
-"study_wave","has_biological_samples","INTEGER",17,6482,6482,1,2,"0","1","1",0
-"study_wave","has_administrative_databases","INTEGER",18,6482,6482,1,2,"0","1","1",0
-"study_wave","has_other_sources","INTEGER",19,6482,6482,1,2,"0","1","0",0
-"study_wave","n_biosamples","INTEGER",20,6482,6482,1,7,"0","6","3",0
-"study_wave","has_biosample_blood","INTEGER",21,6482,6482,1,2,"0","1","1",0
-"study_wave","flag_planned_wave","INTEGER",22,6482,6482,1,2,"0","1","0",0
-"study_domain","ellis_run_id","TEXT",1,8190,8190,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
+"study_wave","ellis_run_id","TEXT",1,6483,6483,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
+"study_wave","study_id","TEXT",2,6483,6483,1,455,"3d","zulu","3d",0
+"study_wave","population_id","TEXT",3,6483,6483,1,39,"1","t-n","1",0
+"study_wave","dce_id","TEXT",4,6483,6483,1,88,"0","r","1",0
+"study_wave","wave_name","TEXT",5,6483,6483,1,6190,,,,1
+"study_wave","wave_order_study","INTEGER",6,6483,6483,1,193,"1","193","1",0
+"study_wave","wave_order_population","INTEGER",7,6483,6483,1,83,"1","83","1",0
+"study_wave","start_year","INTEGER",8,6483,6483,1,98,"1920","2032","2010",0
+"study_wave","end_year","INTEGER",9,6483,5693,0.8781,95,"1922","2035","2012",0
+"study_wave","duration_years","INTEGER",10,6483,5693,0.8781,41,"-1","68","2",0
+"study_wave","years_since_first_wave","INTEGER",11,6483,6483,1,69,"0","83","0",0
+"study_wave","gap_from_prior_wave_years","INTEGER",12,6483,5485,0.8461,27,"0","74","0",0
+"study_wave","n_data_sources","INTEGER",13,6483,6483,1,7,"0","6","4",0
+"study_wave","has_questionnaires","INTEGER",14,6483,6483,1,2,"0","1","1",0
+"study_wave","has_cognitive_measures","INTEGER",15,6483,6483,1,2,"0","1","0",0
+"study_wave","has_physical_measures","INTEGER",16,6483,6483,1,2,"0","1","1",0
+"study_wave","has_biological_samples","INTEGER",17,6483,6483,1,2,"0","1","1",0
+"study_wave","has_administrative_databases","INTEGER",18,6483,6483,1,2,"0","1","1",0
+"study_wave","has_other_sources","INTEGER",19,6483,6483,1,2,"0","1","0",0
+"study_wave","n_biosamples","INTEGER",20,6483,6483,1,7,"0","6","3",0
+"study_wave","has_biosample_blood","INTEGER",21,6483,6483,1,2,"0","1","1",0
+"study_wave","flag_planned_wave","INTEGER",22,6483,6483,1,2,"0","1","0",0
+"study_domain","ellis_run_id","TEXT",1,8190,8190,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
 "study_domain","study_id","TEXT",2,8190,8190,1,455,"3d","zulu","3d",0
 "study_domain","area_code","TEXT",3,8190,8190,1,18,"Administrative_information","Symptoms_signs","Administrative_information",0
 "study_domain","area_label","TEXT",4,8190,8190,1,18,"Administrative information","Symptoms signs","Administrative information",0
 "study_domain","has_area","INTEGER",5,8190,8190,1,2,"0","1","0",0
 "study_domain","attribute_coverage_known","INTEGER",6,8190,8190,1,2,"0","1","0",0
-"dementia_frame","ellis_run_id","TEXT",1,155,155,1,1,"ellis-20260728T015434","ellis-20260728T015434","ellis-20260728T015434",0
-"dementia_frame","ferry_run_id","TEXT",2,155,155,1,1,"maelstrom-20260727T174615","maelstrom-20260727T174615","maelstrom-20260727T174615",0
+"dementia_frame","ellis_run_id","TEXT",1,155,155,1,1,"ellis-20260728T021902","ellis-20260728T021902","ellis-20260728T021902",0
+"dementia_frame","ferry_run_id","TEXT",2,155,155,1,1,"maelstrom-20260728T021329","maelstrom-20260728T021329","maelstrom-20260728T021329",0
 "dementia_frame","study_id","TEXT",3,155,155,1,155,"3d","zulu","3d",0
 "dementia_frame","study_acronym","TEXT",4,155,155,1,154,"10/66","ZULU","3D",0
 "dementia_frame","study_name","TEXT",5,155,155,1,155,,,,1
@@ -200,7 +200,7 @@
 "dementia_frame","has_area_diseases","INTEGER",44,155,155,1,2,"0","1","0",0
 "dementia_frame","has_area_health_status","INTEGER",45,155,155,1,2,"0","1","0",0
 "dementia_frame","n_events_cognitive","INTEGER",46,155,155,1,30,"0","72","27",0
-"dementia_frame","prop_events_cognitive","REAL",47,155,155,1,57,"0","1","0.257142857142857",0
+"dementia_frame","prop_events_cognitive","REAL",47,155,155,1,58,"0","1","0.257142857142857",0
 "dementia_frame","has_source_cognitive_measures","INTEGER",48,155,155,1,2,"0","1","1",0
 "dementia_frame","has_source_questionnaires","INTEGER",49,155,155,1,1,"1","1","1",0
 "dementia_frame","has_source_physical_measures","INTEGER",50,155,155,1,2,"0","1","1",0

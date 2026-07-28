@@ -2,4 +2,4 @@
 "study_profile","study_population","ellis_run_id|study_id","1:N",1,20,2.19,0,0
 "study_profile","study_domain","ellis_run_id|study_id","1:N",18,18,18,0,0
 "study_profile","screening_evidence","ellis_run_id|study_id","1:N",1,23,4.86,244,0
-"study_population","study_wave","ellis_run_id|study_id|population_id","1:N",1,83,6.49,0,0
+"study_population","study_wave","ellis_run_id|study_id|population_id","1:N",1,83,6.5,0,0

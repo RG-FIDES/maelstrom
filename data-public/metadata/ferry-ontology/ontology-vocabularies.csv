@@ -176,10 +176,10 @@
 "population_recruitment_terms","term_value","recruitment term",7,"exist_studies",107,54
 "population_recruitment_terms","term_value","recruitment term",8,"specific_association",26,19
 "population_recruitment_terms","term_value","recruitment term",9,"random",24,19
-"dce_data_sources","data_source_code","event data-source taxonomy",1,"questionnaires",5492,383
+"dce_data_sources","data_source_code","event data-source taxonomy",1,"questionnaires",5493,383
 "dce_data_sources","data_source_code","event data-source taxonomy",2,"biological_samples",3048,308
 "dce_data_sources","data_source_code","event data-source taxonomy",3,"physical_measures",2172,258
-"dce_data_sources","data_source_code","event data-source taxonomy",4,"cognitive_measures",1274,161
+"dce_data_sources","data_source_code","event data-source taxonomy",4,"cognitive_measures",1275,161
 "dce_data_sources","data_source_code","event data-source taxonomy",5,"administratives_databases",1257,173
 "dce_data_sources","data_source_code","event data-source taxonomy",6,"others",1102,177
 "dce_biosamples","biosample_code","event biosample taxonomy",1,"blood",2575,288

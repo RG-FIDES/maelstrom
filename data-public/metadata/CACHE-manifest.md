@@ -5,7 +5,7 @@ This document describes the analysis-ready rectangles produced by the Ellis lane
 `analysis/`.
 
 > **Status**: Populated — profiled 2026-07-28 UTC from Ellis run
-> `ellis-20260728T015434`, built on Ferry run `maelstrom-20260727T174615`.
+> `ellis-20260728T021902`, built on Ferry run `maelstrom-20260728T021329`.
 
 ## Output Summary
 
@@ -13,14 +13,14 @@ This document describes the analysis-ready rectangles produced by the Ellis lane
 | --- | --- |
 | Analytic database | `data-private/derived/maelstrom/maelstrom-analytic.sqlite` |
 | Config key | `database.maelstrom_catalog.analytic` |
-| Parquet mirrors | `data-private/derived/ellis/` |
+| Parquet mirrors | `data-private/derived/ellis/` (9 files, one per object) |
 | Ontology profiles | `data-public/metadata/ellis-ontology/` |
 | Source | `data-private/derived/maelstrom/maelstrom-catalog.sqlite` |
 | Database size | 4,222,976 bytes |
 | SQLite version | 3.53.1 |
 | Objects | 8 tables + 1 view |
 | Columns (all objects) | 224 |
-| Rows (tables only) | 17,192 |
+| Rows (tables only) | 17,193 |
 | Studies profiled | 455 |
 | Studies in the dementia frame | 155 |
 | Lexicon terms | 37 |
@@ -50,7 +50,7 @@ surrounding snippet. No study is called relevant here without a row a reader can
 
 The lane is built from the inside out.
 
-1. **Waves.** Each of the 6,482 data collection events becomes one row of `study_wave`,
+1. **Waves.** Each of the 6,483 data collection events becomes one row of `study_wave`,
    with its measurement sources pivoted from long terms into flags, its position in the
    study's and its population's wave sequence, and the gap in years since the prior wave.
 2. **Populations.** Wave rows aggregate up into `study_population`: age eligibility,
@@ -108,7 +108,7 @@ figure quoted below still holds.
 | 2 — Screening apparatus | `concept_lexicon`, `screening_evidence`, `screening_flow` | 1,066 | What did the lane look for, what did it find, and who was excluded when? |
 | 3 — Study spine | `study_profile` | 455 | What is each study, how deep is its follow-up, and how relevant is it? |
 | 4 — Population layer | `study_population` | 998 | Who was enrolled, at what ages, from where? |
-| 5 — Wave layer | `study_wave` | 6,482 | When was measurement taken, and with what instrument families? |
+| 5 — Wave layer | `study_wave` | 6,483 | When was measurement taken, and with what instrument families? |
 | 6 — Coverage matrix | `study_domain` | 8,190 | Which research areas does each study declare? |
 | 7 — Analytic frame | `dementia_frame` | 155 | Which studies survive the screening funnel? |
 
@@ -140,7 +140,7 @@ erDiagram
 | 2 | `screening_flow` | table | One row per run and screening step | 4 | 6 | `ellis_run_id`, `step` |
 | 3 | `study_profile` | table | One row per run and study | 455 | 69 | `ellis_run_id`, `study_id` |
 | 4 | `study_population` | table | One row per run, study, and population | 998 | 23 | `ellis_run_id`, `study_id`, `population_id` |
-| 5 | `study_wave` | table | One row per run, study, population, and event | 6,482 | 22 | `ellis_run_id`, `study_id`, `population_id`, `dce_id` |
+| 5 | `study_wave` | table | One row per run, study, population, and event | 6,483 | 22 | `ellis_run_id`, `study_id`, `population_id`, `dce_id` |
 | 6 | `study_domain` | table | One row per run, study, and research area | 8,190 | 6 | `ellis_run_id`, `study_id`, `area_code` |
 | 7 | `dementia_frame` | view | One row per run and in-frame study | 155 | 69 | Inherited from `study_profile` |
 
@@ -155,13 +155,13 @@ Cardinalities are measured, not assumed. Source: `cache-relationships.csv`.
 | `study_profile` | `study_population` | `ellis_run_id`, `study_id` | 1 / 2.19 / 20 | 0 | 0 |
 | `study_profile` | `study_domain` | `ellis_run_id`, `study_id` | 18 / 18 / 18 | 0 | 0 |
 | `study_profile` | `screening_evidence` | `ellis_run_id`, `study_id` | 1 / 4.86 / 23 | 244 | 0 |
-| `study_population` | `study_wave` | `+ population_id` | 1 / 6.49 / 83 | 0 | 0 |
+| `study_population` | `study_wave` | `+ population_id` | 1 / 6.50 / 83 | 0 | 0 |
 
 No orphan rows exist anywhere. The 244 studies without evidence rows are the studies where
 no lexicon term matched anywhere — a substantive finding, not a defect.
 
 > **Warning — composite keys are mandatory.** As in the Ferry database, `population_id`
-> takes only 39 distinct values across 998 rows and `dce_id` only 88 across 6,482. These
+> takes only 39 distinct values across 998 rows and `dce_id` only 88 across 6,483. These
 > are sequence labels local to their parent, not global keys. Any join must carry the full
 > key path.
 
@@ -441,7 +441,7 @@ definition needs no re-run.
 
 ## `study_wave` — The Wave Layer
 
-6,482 rows, 22 columns. One row per data collection event. This is the temporal spine and
+6,483 rows, 22 columns. One row per data collection event. This is the temporal spine and
 the natural input to Gantt-style design plots.
 
 | Field | Type | Fill | Description |
@@ -569,6 +569,8 @@ These are properties of the method, not defects to be fixed silently.
 - Always join on the full composite key path; `population_id` and `dce_id` are local labels.
 - Filter to the current `ellis_run_id` even though only one run is present, so the query
   survives a future multi-run archive.
+- Every object is mirrored to parquet, including `ellis_runs`, so an analysis that never
+  opens the SQLite file can still report which run and which Ferry extraction it used.
 - **Representation differs by format.** SQLite has no boolean type: `flag_*`, `sig_*`,
   `has_*`, and `is_*` are 0/1 integers there, and `design_label` and `relevance_tier` are
   plain text. The parquet mirrors in `data-private/derived/ellis/` carry real logicals and

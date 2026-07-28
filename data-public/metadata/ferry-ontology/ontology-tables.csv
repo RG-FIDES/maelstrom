@@ -8,6 +8,6 @@
 "5-population-layer","study_populations","one row per run, study, and population",998,17,"run_id|study_id|population_id"
 "5-population-layer","population_countries","one row per population and country",1127,4,""
 "5-population-layer","population_recruitment_terms","one row per population and recruitment term",2051,5,""
-"6-event-layer","data_collection_events","one row per population and data collection event",6482,11,"run_id|study_id|population_id|dce_id"
-"6-event-layer","dce_data_sources","one row per event and data-source term",14345,5,""
+"6-event-layer","data_collection_events","one row per population and data collection event",6483,11,"run_id|study_id|population_id|dce_id"
+"6-event-layer","dce_data_sources","one row per event and data-source term",14347,5,""
 "6-event-layer","dce_biosamples","one row per event and biosample term",4585,5,""

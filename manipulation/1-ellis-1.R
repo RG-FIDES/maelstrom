@@ -1076,11 +1076,20 @@ cat("\nAnalytic database: ", arguments$target_db, sep = "")
 
 # ---- save-parquet ------------------------------------------------------------
 # Parquet mirrors preserve the R types the SQLite contract cannot hold: factors
-# stay factors and flags stay logical.
+# stay factors and flags stay logical. The run record is read back from the
+# promoted database so the mirror carries the completed status and timestamp,
+# which lets an analyst working only from parquet still trace provenance.
 
 invisible(ensure_dir(arguments$parquet_dir))
 
+ds_ellis_run <- local({
+  con <- DBI::dbConnect(RSQLite::SQLite(), arguments$target_db)
+  on.exit(DBI::dbDisconnect(con), add = TRUE)
+  DBI::dbGetQuery(con, "SELECT * FROM ellis_runs")
+})
+
 parquet_targets <- list(
+  ellis_runs = ds_ellis_run,
   study_profile = ds_profile,
   study_population = ds_population,
   study_wave = ds_wave,
