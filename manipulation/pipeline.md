@@ -17,6 +17,8 @@ flowchart LR
     schema[maelstrom-catalog-schema.sql]
     build[maelstrom-catalog.sqlite.building]
     cache[maelstrom-catalog.sqlite]
+    ontology[ferry-ontology CSV profiles]
+    manifest[INPUT-manifest.md]
     ellis[Future Ellis lane]
     analysis[Harmonization analyses]
 
@@ -25,6 +27,8 @@ flowchart LR
     schema --> ferry
     ferry --> build
     build -->|Atomic promotion| cache
+    cache --> ontology
+    ontology --> manifest
     cache -.-> ellis
     ellis -.-> analysis
 ```
@@ -35,10 +39,12 @@ Solid arrows are implemented. Dotted arrows mark planned work.
 
 | Artifact | Role |
 | --- | --- |
-| `manipulation/0-ferry-extract.R` | Queries the public APIs and orchestrates SQLite generation |
+| `manipulation/0-ferry-extract.R` | Queries the public APIs, orchestrates SQLite generation, and profiles the result |
 | `manipulation/maelstrom-catalog-schema.sql` | Declares tables, keys, and indexes |
 | `config.yml` | Declares the canonical SQLite output path |
 | `data-private/derived/maelstrom/maelstrom-catalog.sqlite` | Current Ferry staging database |
+| `data-public/metadata/ferry-ontology/` | Deterministic table, column, relationship, and vocabulary profiles |
+| `data-public/metadata/INPUT-manifest.md` | Human-readable description of the staging database |
 | `manipulation/pipeline-project-spec.md` | Defines source, lane, output, and validation contracts |
 
 ## Execution
@@ -55,6 +61,16 @@ temporary database, and atomically replaces the canonical SQLite file after succ
 
 The SQL schema is not a separate manual prerequisite. The Ferry lane executes it as part
 of every rebuild, ensuring that code and physical database structure stay synchronized.
+
+After promotion, the lane profiles the delivered database and rewrites
+`data-public/metadata/ferry-ontology/`. Those CSV files are the corroboration for every
+figure quoted in `data-public/metadata/INPUT-manifest.md`.
+
+To regenerate only the profiles from an existing database, without contacting the API:
+
+```powershell
+Rscript -e "src <- readLines('./manipulation/0-ferry-extract.R'); i <- grep('^# ---- execute-extraction', src)[1]; eval(parse(text = paste(src[seq_len(i - 1L)], collapse = '\n'))); profile_ontology()"
+```
 
 ## Diagnostic Checkpoints
 
@@ -113,6 +129,8 @@ The first complete extraction on 2026-07-27 produced:
 
 These counts are diagnostic baselines rather than permanent expectations. Changes in the
 public catalogue should be preserved and investigated, not forced back to these values.
+The machine-readable form of this baseline is `ontology-tables.csv`; diff it after a run
+to see exactly what moved.
 
 ## Failure Behavior
 

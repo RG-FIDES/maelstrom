@@ -1,0 +1,193 @@
+"table_name","column_name","vocabulary_label","term_rank","term_value","n_rows","n_studies"
+"studies","published","publication state",1,"1",455,455
+"studies","design_code","study design taxonomy",1,"cohort_study",304,304
+"studies","design_code","study design taxonomy",2,"registry",71,71
+"studies","design_code","study design taxonomy",3,"cross_sectional",40,40
+"studies","design_code","study design taxonomy",4,"case_control",15,15
+"studies","design_code","study design taxonomy",5,"clinical_trial",15,15
+"studies","design_code","study design taxonomy",6,"other",9,9
+"studies","design_code","study design taxonomy",7,"case_only",1,1
+"studies","access_data","data access channel",1,"yes",415,415
+"studies","access_data","data access channel",2,"no",33,33
+"studies","access_data","data access channel",3,"(missing)",4,4
+"studies","access_data","data access channel",4,"na",3,3
+"studies","access_biosamples","biosample access channel",1,"no",173,173
+"studies","access_biosamples","biosample access channel",2,"na",139,139
+"studies","access_biosamples","biosample access channel",3,"yes",136,136
+"studies","access_biosamples","biosample access channel",4,"(missing)",7,7
+"studies","access_other","other access channel",1,"na",390,390
+"studies","access_other","other access channel",2,"yes",30,30
+"studies","access_other","other access channel",3,"(missing)",19,19
+"studies","access_other","other access channel",4,"no",16,16
+"studies","access_fees","access fee flag",1,"0",353,353
+"studies","access_fees","access fee flag",2,"(missing)",65,65
+"studies","access_fees","access fee flag",3,"1",37,37
+"studies","access_restrictions","access restriction flag",1,"0",357,357
+"studies","access_restrictions","access restriction flag",2,"(missing)",65,65
+"studies","access_restrictions","access restriction flag",3,"1",33,33
+"studies","maelstrom_authorized","Maelstrom authorization flag",1,"0",265,265
+"studies","maelstrom_authorized","Maelstrom authorization flag",2,"1",190,190
+"study_memberships","membership_role","contact and investigator roles",1,"investigator",1613,388
+"study_memberships","membership_role","contact and investigator roles",2,"contact",586,446
+"study_memberships","country_iso","institution country",1,"CAN",1026,234
+"study_memberships","country_iso","institution country",2,"USA",300,77
+"study_memberships","country_iso","institution country",3,"SWE",172,48
+"study_memberships","country_iso","institution country",4,"(missing)",136,54
+"study_memberships","country_iso","institution country",5,"GBR",120,29
+"study_memberships","country_iso","institution country",6,"CHE",98,12
+"study_memberships","country_iso","institution country",7,"AUS",56,10
+"study_memberships","country_iso","institution country",8,"DEU",40,12
+"study_memberships","country_iso","institution country",9,"ESP",25,5
+"study_memberships","country_iso","institution country",10,"FRA",24,6
+"study_memberships","country_iso","institution country",11,"NLD",22,9
+"study_memberships","country_iso","institution country",12,"United States",20,4
+"study_memberships","country_iso","institution country",13,"ITA",16,6
+"study_memberships","country_iso","institution country",14,"JPN",14,3
+"study_memberships","country_iso","institution country",15,"FIN",12,5
+"study_memberships","country_iso","institution country",16,"Italy",11,2
+"study_memberships","country_iso","institution country",17,"CHN",10,6
+"study_memberships","country_iso","institution country",18,"NZL",10,2
+"study_memberships","country_iso","institution country",19,"DNK",8,3
+"study_memberships","country_iso","institution country",20,"Germany",8,3
+"study_memberships","country_iso","institution country",21,"TWN",8,1
+"study_memberships","country_iso","institution country",22,"Canada",7,4
+"study_memberships","country_iso","institution country",23,"GRC",7,2
+"study_memberships","country_iso","institution country",24,"BRA",4,2
+"study_memberships","country_iso","institution country",25,"IND",4,1
+"study_memberships","country_iso","institution country",26,"NOR",4,1
+"study_memberships","country_iso","institution country",27,"Greece",3,1
+"study_memberships","country_iso","institution country",28,"POL",3,2
+"study_memberships","country_iso","institution country",29,"ZAF",3,1
+"study_memberships","country_iso","institution country",30,"COL",2,1
+"study_memberships","country_iso","institution country",31,"Finland",2,1
+"study_memberships","country_iso","institution country",32,"France",2,1
+"study_memberships","country_iso","institution country",33,"Indonesia",2,1
+"study_memberships","country_iso","institution country",34,"KOR",2,1
+"study_memberships","country_iso","institution country",35,"PHL",2,1
+"study_memberships","country_iso","institution country",36,"ALB",1,1
+"study_memberships","country_iso","institution country",37,"CUB",1,1
+"study_memberships","country_iso","institution country",38,"CYP",1,1
+"study_memberships","country_iso","institution country",39,"CZE",1,1
+"study_memberships","country_iso","institution country",40,"DOM",1,1
+"study_memberships","country_iso","institution country",41,"IRL",1,1
+"study_memberships","country_iso","institution country",42,"ISL",1,1
+"study_memberships","country_iso","institution country",43,"Japan",1,1
+"study_memberships","country_iso","institution country",44,"LTU",1,1
+"study_memberships","country_iso","institution country",45,"P.R.China",1,1
+"study_memberships","country_iso","institution country",46,"PER",1,1
+"study_memberships","country_iso","institution country",47,"PRI",1,1
+"study_memberships","country_iso","institution country",48,"RUS",1,1
+"study_memberships","country_iso","institution country",49,"Switzerland",1,1
+"study_memberships","country_iso","institution country",50,"United Kingdom",1,1
+"study_memberships","country_iso","institution country",51,"VEN",1,1
+"study_attributes","attribute_namespace","annotation namespace",1,"Mlstr_area",1628,201
+"study_attributes","attribute_name","annotation term",1,"Sociodemographic_economic_characteristics",199,199
+"study_attributes","attribute_name","annotation term",2,"Administrative_information",193,193
+"study_attributes","attribute_name","annotation term",3,"Diseases",168,168
+"study_attributes","attribute_name","annotation term",4,"Laboratory_measures",122,122
+"study_attributes","attribute_name","annotation term",5,"Physical_measures",115,115
+"study_attributes","attribute_name","annotation term",6,"Lifestyle_behaviours",111,111
+"study_attributes","attribute_name","annotation term",7,"Medication_supplements",99,99
+"study_attributes","attribute_name","annotation term",8,"Cognitive_psychological_measures",96,96
+"study_attributes","attribute_name","annotation term",9,"Health_community_care_utilization",86,86
+"study_attributes","attribute_name","annotation term",10,"Health_status_functional_limitations",72,72
+"study_attributes","attribute_name","annotation term",11,"Social_environment",58,58
+"study_attributes","attribute_name","annotation term",12,"Non_pharmacological_interventions",57,57
+"study_attributes","attribute_name","annotation term",13,"Symptoms_signs",54,54
+"study_attributes","attribute_name","annotation term",14,"End_of_life",50,50
+"study_attributes","attribute_name","annotation term",15,"Life_events_plans_beliefs",50,50
+"study_attributes","attribute_name","annotation term",16,"Physical_environment",40,40
+"study_attributes","attribute_name","annotation term",17,"Reproduction",36,36
+"study_attributes","attribute_name","annotation term",18,"Preschool_school_work",22,22
+"study_populations","newborn","newborn inclusion flag",1,"0",937,447
+"study_populations","newborn","newborn inclusion flag",2,"1",61,41
+"study_populations","twins","twin inclusion flag",1,"0",988,447
+"study_populations","twins","twin inclusion flag",2,"1",10,9
+"population_countries","country_iso","population country coverage",1,"CAN",527,236
+"population_countries","country_iso","population country coverage",2,"USA",146,65
+"population_countries","country_iso","population country coverage",3,"SWE",102,50
+"population_countries","country_iso","population country coverage",4,"DEU",43,15
+"population_countries","country_iso","population country coverage",5,"GBR",40,26
+"population_countries","country_iso","population country coverage",6,"CHE",29,13
+"population_countries","country_iso","population country coverage",7,"NLD",21,12
+"population_countries","country_iso","population country coverage",8,"IND",15,4
+"population_countries","country_iso","population country coverage",9,"AUS",14,9
+"population_countries","country_iso","population country coverage",10,"CHN",14,7
+"population_countries","country_iso","population country coverage",11,"ESP",12,8
+"population_countries","country_iso","population country coverage",12,"FIN",10,6
+"population_countries","country_iso","population country coverage",13,"JPN",10,5
+"population_countries","country_iso","population country coverage",14,"DNK",9,7
+"population_countries","country_iso","population country coverage",15,"GRC",8,6
+"population_countries","country_iso","population country coverage",16,"FRA",7,6
+"population_countries","country_iso","population country coverage",17,"ITA",7,7
+"population_countries","country_iso","population country coverage",18,"ZAF",7,2
+"population_countries","country_iso","population country coverage",19,"POL",6,4
+"population_countries","country_iso","population country coverage",20,"BRA",5,3
+"population_countries","country_iso","population country coverage",21,"EST",5,3
+"population_countries","country_iso","population country coverage",22,"ISR",5,3
+"population_countries","country_iso","population country coverage",23,"NOR",5,3
+"population_countries","country_iso","population country coverage",24,"BEL",4,2
+"population_countries","country_iso","population country coverage",25,"HRV",4,2
+"population_countries","country_iso","population country coverage",26,"HUN",4,2
+"population_countries","country_iso","population country coverage",27,"IRL",4,3
+"population_countries","country_iso","population country coverage",28,"MEX",4,3
+"population_countries","country_iso","population country coverage",29,"ARG",3,1
+"population_countries","country_iso","population country coverage",30,"CHL",3,1
+"population_countries","country_iso","population country coverage",31,"EGY",3,1
+"population_countries","country_iso","population country coverage",32,"JAM",3,1
+"population_countries","country_iso","population country coverage",33,"JOR",3,1
+"population_countries","country_iso","population country coverage",34,"OMN",3,1
+"population_countries","country_iso","population country coverage",35,"QAT",3,1
+"population_countries","country_iso","population country coverage",36,"ROU",3,1
+"population_countries","country_iso","population country coverage",37,"SRB",3,1
+"population_countries","country_iso","population country coverage",38,"URY",3,1
+"population_countries","country_iso","population country coverage",39,"CAF",2,1
+"population_countries","country_iso","population country coverage",40,"COG",2,1
+"population_countries","country_iso","population country coverage",41,"CZE",2,2
+"population_countries","country_iso","population country coverage",42,"ISL",2,2
+"population_countries","country_iso","population country coverage",43,"NZL",2,2
+"population_countries","country_iso","population country coverage",44,"PER",2,1
+"population_countries","country_iso","population country coverage",45,"RUS",2,2
+"population_countries","country_iso","population country coverage",46,"ALB",1,1
+"population_countries","country_iso","population country coverage",47,"AUT",1,1
+"population_countries","country_iso","population country coverage",48,"COL",1,1
+"population_countries","country_iso","population country coverage",49,"CUB",1,1
+"population_countries","country_iso","population country coverage",50,"DOM",1,1
+"population_countries","country_iso","population country coverage",51,"GHA",1,1
+"population_countries","country_iso","population country coverage",52,"IDN",1,1
+"population_countries","country_iso","population country coverage",53,"KOR",1,1
+"population_countries","country_iso","population country coverage",54,"LTU",1,1
+"population_countries","country_iso","population country coverage",55,"LUX",1,1
+"population_countries","country_iso","population country coverage",56,"PHL",1,1
+"population_countries","country_iso","population country coverage",57,"PRI",1,1
+"population_countries","country_iso","population country coverage",58,"PRT",1,1
+"population_countries","country_iso","population country coverage",59,"SVN",1,1
+"population_countries","country_iso","population country coverage",60,"TWN",1,1
+"population_countries","country_iso","population country coverage",61,"VEN",1,1
+"population_recruitment_terms","term_group","recruitment term family",1,"data_sources",1083,452
+"population_recruitment_terms","term_group","recruitment term family",2,"general_population_sources",508,255
+"population_recruitment_terms","term_group","recruitment term family",3,"specific_population_sources",460,228
+"population_recruitment_terms","term_value","recruitment term",1,"general_population",486,262
+"population_recruitment_terms","term_value","recruitment term",2,"specific_population",461,230
+"population_recruitment_terms","term_value","recruitment term",3,"selected_samples",286,160
+"population_recruitment_terms","term_value","recruitment term",4,"other",242,127
+"population_recruitment_terms","term_value","recruitment term",5,"clinic_patients",221,125
+"population_recruitment_terms","term_value","recruitment term",6,"volunteer",198,104
+"population_recruitment_terms","term_value","recruitment term",7,"exist_studies",107,54
+"population_recruitment_terms","term_value","recruitment term",8,"specific_association",26,19
+"population_recruitment_terms","term_value","recruitment term",9,"random",24,19
+"dce_data_sources","data_source_code","event data-source taxonomy",1,"questionnaires",5492,383
+"dce_data_sources","data_source_code","event data-source taxonomy",2,"biological_samples",3048,308
+"dce_data_sources","data_source_code","event data-source taxonomy",3,"physical_measures",2172,258
+"dce_data_sources","data_source_code","event data-source taxonomy",4,"cognitive_measures",1274,161
+"dce_data_sources","data_source_code","event data-source taxonomy",5,"administratives_databases",1257,173
+"dce_data_sources","data_source_code","event data-source taxonomy",6,"others",1102,177
+"dce_biosamples","biosample_code","event biosample taxonomy",1,"blood",2575,288
+"dce_biosamples","biosample_code","event biosample taxonomy",2,"saliva",633,77
+"dce_biosamples","biosample_code","event biosample taxonomy",3,"urine",580,86
+"dce_biosamples","biosample_code","event biosample taxonomy",4,"others",465,69
+"dce_biosamples","biosample_code","event biosample taxonomy",5,"hair",96,20
+"dce_biosamples","biosample_code","event biosample taxonomy",6,"nail",91,11
+"dce_biosamples","biosample_code","event biosample taxonomy",7,"buccal_cells",69,18
+"dce_biosamples","biosample_code","event biosample taxonomy",8,"tissues",44,22
+"dce_biosamples","biosample_code","event biosample taxonomy",9,"cord_blood",32,19

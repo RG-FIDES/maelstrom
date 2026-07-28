@@ -66,6 +66,22 @@ The database is rebuilt atomically. The lane writes a temporary `.building` data
 validates successful completion of all writes, and replaces the canonical database only
 after the build succeeds.
 
+The lane also regenerates a set of machine-readable ontology profiles in
+`data-public/metadata/ferry-ontology/`:
+
+| Artifact | Contents |
+| --- | --- |
+| `ontology-provenance.csv` | Run identifier, timestamps, database size, profile totals |
+| `ontology-tables.csv` | Group, grain, row count, column count, primary key per table |
+| `ontology-columns.csv` | Fill rate, distinct count, range, example value per column |
+| `ontology-relationships.csv` | Observed cardinality and orphan counts per parent-child edge |
+| `ontology-vocabularies.csv` | Every distinct value of every controlled-vocabulary column |
+
+These files are the deterministic corroboration for every figure quoted in
+`data-public/metadata/INPUT-manifest.md`. They describe the delivered database only; the
+profiler never modifies it. A bounded run does not overwrite them unless `--ontology-dir`
+is passed explicitly.
+
 ## SQLite Table Contract
 
 | Table | Grain | Purpose |
@@ -130,7 +146,9 @@ and analytical views. Those semantic transformations must not be added to
 
 The following stable-contract artifacts will be created when the Ellis target is defined:
 
-- `data-public/metadata/INPUT-manifest.md`;
 - `data-public/metadata/CACHE-manifest.md`;
 - `manipulation/pipeline-validation.dcf`;
 - at least one numbered Ellis lane.
+
+`data-public/metadata/INPUT-manifest.md` is complete and describes the Ferry staging
+database as delivered on 2026-07-27.

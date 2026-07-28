@@ -1,0 +1,2 @@
+"generated_at_utc","database_path","database_bytes","sqlite_version","profiled_table_count","profiled_row_count","profiled_column_count","run_id","started_at_utc","completed_at_utc","base_url","page_size","expected_total_studies","extracted_inventory_studies","extracted_detail_studies","status"
+"2026-07-28 00:30:31 UTC","./data-private/derived/maelstrom/maelstrom-catalog.sqlite",33464320,"3.53.1",12,34781,124,"maelstrom-20260727T174615","2026-07-27 17:46:15 UTC","2026-07-27 17:47:32 UTC","https://www.maelstrom-research.org",50,455,455,455,"completed"

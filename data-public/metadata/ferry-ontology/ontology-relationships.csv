@@ -1,0 +1,14 @@
+"parent_table","child_table","join_keys","declared_cardinality","parent_rows","child_rows","parents_with_children","parents_without_children","orphan_child_rows","min_children_per_parent","median_children_per_parent","mean_children_per_parent","max_children_per_parent"
+"extraction_runs","study_inventory","run_id","1:N",1,455,1,0,0,455,455,455,455
+"extraction_runs","study_detail_raw","run_id","1:N",1,455,1,0,0,455,455,455,455
+"extraction_runs","studies","run_id","1:N",1,455,1,0,0,455,455,455,455
+"study_inventory","study_detail_raw","run_id|study_id","1:1",455,455,455,0,0,1,1,1,1
+"study_inventory","studies","run_id|study_id","1:1",455,455,455,0,0,1,1,1,1
+"studies","study_memberships","run_id|study_id","1:N",455,2199,454,1,0,1,4,4.84,25
+"studies","study_attributes","run_id|study_id","1:N",455,1628,201,254,0,1,8,8.1,17
+"studies","study_populations","run_id|study_id","1:N",455,998,455,0,0,1,1,2.19,20
+"study_populations","population_countries","run_id|study_id|population_id","1:N",998,1127,994,4,0,1,1,1.13,25
+"study_populations","population_recruitment_terms","run_id|study_id|population_id","1:N",998,2051,991,7,0,1,2,2.07,6
+"study_populations","data_collection_events","run_id|study_id|population_id","1:N",998,6482,998,0,0,1,4,6.49,83
+"data_collection_events","dce_data_sources","run_id|study_id|population_id|dce_id","1:N",6482,14345,6481,1,0,1,2,2.21,6
+"data_collection_events","dce_biosamples","run_id|study_id|population_id|dce_id","1:N",6482,4585,3050,3432,0,1,1,1.5,6

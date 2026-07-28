@@ -34,6 +34,8 @@ DEFAULT_MAX_STUDIES <- Inf
 PROJECT_CONFIG <- config::get(file = "./config.yml")
 DEFAULT_DB_PATH <- PROJECT_CONFIG$database$maelstrom_catalog$staging
 DEFAULT_SCHEMA_PATH <- "./manipulation/maelstrom-catalog-schema.sql"
+DEFAULT_ONTOLOGY_DIR <- "./data-public/metadata/ferry-ontology"
+ONTOLOGY_TEXT_LIMIT <- 80L
 
 if (is.null(DEFAULT_DB_PATH) || !nzchar(DEFAULT_DB_PATH)) {
   stop("Missing database.maelstrom_catalog.staging in config.yml")
@@ -45,7 +47,9 @@ parse_args <- function(args) {
     db_path = DEFAULT_DB_PATH,
     page_size = DEFAULT_PAGE_SIZE,
     max_studies = DEFAULT_MAX_STUDIES,
-    schema_path = DEFAULT_SCHEMA_PATH
+    schema_path = DEFAULT_SCHEMA_PATH,
+    ontology_dir = DEFAULT_ONTOLOGY_DIR,
+    ontology_dir_explicit = FALSE
   )
 
   for (argument in args) {
@@ -68,6 +72,10 @@ parse_args <- function(args) {
     }
     if (key == "--schema-path") {
       parsed$schema_path <- value
+    }
+    if (key == "--ontology-dir") {
+      parsed$ontology_dir <- value
+      parsed$ontology_dir_explicit <- TRUE
     }
   }
 
@@ -523,6 +531,491 @@ write_frame <- function(con, name, frame) {
   DBI::dbWriteTable(con, name, frame, append = TRUE)
 }
 
+# ---- SECTION: Ontology Profiling ---------------------------------------------
+# Deterministic description of the database that was actually delivered.
+# Every count, cardinality, and controlled vocabulary quoted in
+# ./data-public/metadata/INPUT-manifest.md is regenerated here, so the manifest
+# can be re-corroborated after any later run against a changed source catalogue.
+# The profiler reads the promoted database only; it never alters it.
+
+# ---- declare-ontology --------------------------------------------------------
+# Cognitive grouping of the physical tables. Groups are documentation devices,
+# not database objects: they let a reader hold twelve tables as six ideas.
+TABLE_ONTOLOGY <- data.frame(
+  table_name = c(
+    "extraction_runs",
+    "study_inventory",
+    "study_detail_raw",
+    "studies",
+    "study_memberships",
+    "study_attributes",
+    "study_populations",
+    "population_countries",
+    "population_recruitment_terms",
+    "data_collection_events",
+    "dce_data_sources",
+    "dce_biosamples"
+  ),
+  table_group = c(
+    "1-run-provenance",
+    "2-raw-payload",
+    "2-raw-payload",
+    "3-study-core",
+    "4-study-context",
+    "4-study-context",
+    "5-population-layer",
+    "5-population-layer",
+    "5-population-layer",
+    "6-event-layer",
+    "6-event-layer",
+    "6-event-layer"
+  ),
+  grain = c(
+    "one row per extraction run",
+    "one row per run and study",
+    "one row per run and study",
+    "one row per run and study",
+    "one row per run, study, role, and person",
+    "one row per run, study, and annotation term",
+    "one row per run, study, and population",
+    "one row per population and country",
+    "one row per population and recruitment term",
+    "one row per population and data collection event",
+    "one row per event and data-source term",
+    "one row per event and biosample term"
+  ),
+  stringsAsFactors = FALSE
+)
+
+# Declared parent-child edges. Keys are pipe-delimited to keep the table flat.
+RELATIONSHIP_ONTOLOGY <- data.frame(
+  parent_table = c(
+    "extraction_runs",
+    "extraction_runs",
+    "extraction_runs",
+    "study_inventory",
+    "study_inventory",
+    "studies",
+    "studies",
+    "studies",
+    "study_populations",
+    "study_populations",
+    "study_populations",
+    "data_collection_events",
+    "data_collection_events"
+  ),
+  child_table = c(
+    "study_inventory",
+    "study_detail_raw",
+    "studies",
+    "study_detail_raw",
+    "studies",
+    "study_memberships",
+    "study_attributes",
+    "study_populations",
+    "population_countries",
+    "population_recruitment_terms",
+    "data_collection_events",
+    "dce_data_sources",
+    "dce_biosamples"
+  ),
+  join_keys = c(
+    "run_id",
+    "run_id",
+    "run_id",
+    "run_id|study_id",
+    "run_id|study_id",
+    "run_id|study_id",
+    "run_id|study_id",
+    "run_id|study_id",
+    "run_id|study_id|population_id",
+    "run_id|study_id|population_id",
+    "run_id|study_id|population_id",
+    "run_id|study_id|population_id|dce_id",
+    "run_id|study_id|population_id|dce_id"
+  ),
+  declared_cardinality = c(
+    "1:N", "1:N", "1:N",
+    "1:1", "1:1",
+    "1:N", "1:N", "1:N",
+    "1:N", "1:N", "1:N",
+    "1:N", "1:N"
+  ),
+  stringsAsFactors = FALSE
+)
+
+# Columns whose values form a controlled vocabulary in the source catalogue.
+VOCABULARY_ONTOLOGY <- data.frame(
+  table_name = c(
+    "studies",
+    "studies",
+    "studies",
+    "studies",
+    "studies",
+    "studies",
+    "studies",
+    "studies",
+    "study_memberships",
+    "study_memberships",
+    "study_attributes",
+    "study_attributes",
+    "study_populations",
+    "study_populations",
+    "population_countries",
+    "population_recruitment_terms",
+    "population_recruitment_terms",
+    "dce_data_sources",
+    "dce_biosamples"
+  ),
+  column_name = c(
+    "published",
+    "design_code",
+    "access_data",
+    "access_biosamples",
+    "access_other",
+    "access_fees",
+    "access_restrictions",
+    "maelstrom_authorized",
+    "membership_role",
+    "country_iso",
+    "attribute_namespace",
+    "attribute_name",
+    "newborn",
+    "twins",
+    "country_iso",
+    "term_group",
+    "term_value",
+    "data_source_code",
+    "biosample_code"
+  ),
+  vocabulary_label = c(
+    "publication state",
+    "study design taxonomy",
+    "data access channel",
+    "biosample access channel",
+    "other access channel",
+    "access fee flag",
+    "access restriction flag",
+    "Maelstrom authorization flag",
+    "contact and investigator roles",
+    "institution country",
+    "annotation namespace",
+    "annotation term",
+    "newborn inclusion flag",
+    "twin inclusion flag",
+    "population country coverage",
+    "recruitment term family",
+    "recruitment term",
+    "event data-source taxonomy",
+    "event biosample taxonomy"
+  ),
+  stringsAsFactors = FALSE
+)
+
+# ---- declare-ontology-functions ----------------------------------------------
+quote_identifier <- function(identifier) {
+  paste0("\"", identifier, "\"")
+}
+
+split_join_keys <- function(join_keys) {
+  strsplit(join_keys, "|", fixed = TRUE)[[1]]
+}
+
+is_opaque_column <- function(column_name) {
+  grepl("(_json|_html_en)$", column_name)
+}
+
+truncate_text <- function(value, max_chars = ONTOLOGY_TEXT_LIMIT) {
+  if (is.null(value) || length(value) == 0) {
+    return(NA_character_)
+  }
+
+  text <- as.character(value[[1]])
+  if (is.na(text)) {
+    return(NA_character_)
+  }
+
+  text <- gsub("[\r\n\t]+", " ", text)
+  if (nchar(text) > max_chars) {
+    return(paste0(substr(text, 1, max_chars), "..."))
+  }
+
+  text
+}
+
+table_row_count <- function(con, table_name) {
+  query <- paste0("SELECT COUNT(*) AS n FROM ", quote_identifier(table_name))
+  as.integer(DBI::dbGetQuery(con, query)$n[[1]])
+}
+
+profile_table_inventory <- function(con) {
+  rows <- list()
+
+  for (index in seq_len(nrow(TABLE_ONTOLOGY))) {
+    table_name <- TABLE_ONTOLOGY$table_name[[index]]
+    columns <- DBI::dbGetQuery(
+      con,
+      paste0("PRAGMA table_info(", quote_identifier(table_name), ")")
+    )
+
+    rows[[length(rows) + 1L]] <- data.frame(
+      table_group = TABLE_ONTOLOGY$table_group[[index]],
+      table_name = table_name,
+      grain = TABLE_ONTOLOGY$grain[[index]],
+      row_count = table_row_count(con, table_name),
+      column_count = nrow(columns),
+      primary_key_columns = paste(columns$name[columns$pk > 0], collapse = "|"),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  bind_rows_safe(rows)
+}
+
+profile_column_inventory <- function(con) {
+  rows <- list()
+
+  for (index in seq_len(nrow(TABLE_ONTOLOGY))) {
+    table_name <- TABLE_ONTOLOGY$table_name[[index]]
+    table_quoted <- quote_identifier(table_name)
+    columns <- DBI::dbGetQuery(
+      con,
+      paste0("PRAGMA table_info(", table_quoted, ")")
+    )
+
+    for (column_index in seq_len(nrow(columns))) {
+      column_name <- columns$name[[column_index]]
+      column_quoted <- quote_identifier(column_name)
+      opaque <- is_opaque_column(column_name)
+
+      counts <- DBI::dbGetQuery(
+        con,
+        paste0(
+          "SELECT COUNT(*) AS n_rows,",
+          " COUNT(", column_quoted, ") AS n_non_null,",
+          " COUNT(DISTINCT ", column_quoted, ") AS n_distinct",
+          " FROM ", table_quoted
+        )
+      )
+
+      min_value <- NA_character_
+      max_value <- NA_character_
+      example_value <- NA_character_
+
+      if (!opaque && counts$n_non_null[[1]] > 0) {
+        extremes <- DBI::dbGetQuery(
+          con,
+          paste0(
+            "SELECT MIN(", column_quoted, ") AS min_value,",
+            " MAX(", column_quoted, ") AS max_value",
+            " FROM ", table_quoted
+          )
+        )
+        example <- DBI::dbGetQuery(
+          con,
+          paste0(
+            "SELECT ", column_quoted, " AS example_value FROM ", table_quoted,
+            " WHERE ", column_quoted, " IS NOT NULL LIMIT 1"
+          )
+        )
+
+        min_value <- truncate_text(extremes$min_value)
+        max_value <- truncate_text(extremes$max_value)
+        example_value <- truncate_text(example$example_value)
+      }
+
+      fill_rate <- if (counts$n_rows[[1]] > 0) {
+        round(counts$n_non_null[[1]] / counts$n_rows[[1]], 4)
+      } else {
+        NA_real_
+      }
+
+      rows[[length(rows) + 1L]] <- data.frame(
+        table_group = TABLE_ONTOLOGY$table_group[[index]],
+        table_name = table_name,
+        column_position = as.integer(column_index),
+        column_name = column_name,
+        declared_type = columns$type[[column_index]],
+        is_primary_key = as.integer(columns$pk[[column_index]] > 0),
+        is_opaque_payload = as.integer(opaque),
+        n_rows = as.integer(counts$n_rows[[1]]),
+        n_non_null = as.integer(counts$n_non_null[[1]]),
+        fill_rate = fill_rate,
+        n_distinct = as.integer(counts$n_distinct[[1]]),
+        min_value = min_value,
+        max_value = max_value,
+        example_value = example_value,
+        stringsAsFactors = FALSE
+      )
+    }
+  }
+
+  bind_rows_safe(rows)
+}
+
+profile_relationship_inventory <- function(con) {
+  rows <- list()
+
+  for (index in seq_len(nrow(RELATIONSHIP_ONTOLOGY))) {
+    parent_table <- RELATIONSHIP_ONTOLOGY$parent_table[[index]]
+    child_table <- RELATIONSHIP_ONTOLOGY$child_table[[index]]
+    keys <- split_join_keys(RELATIONSHIP_ONTOLOGY$join_keys[[index]])
+    keys_quoted <- quote_identifier(keys)
+
+    join_condition <- paste0(
+      "child.", keys_quoted, " = parent.", keys_quoted,
+      collapse = " AND "
+    )
+
+    parent_rows <- table_row_count(con, parent_table)
+    child_rows <- table_row_count(con, child_table)
+
+    parents_with_children <- DBI::dbGetQuery(
+      con,
+      paste0(
+        "SELECT COUNT(*) AS n FROM ", quote_identifier(parent_table), " AS parent",
+        " WHERE EXISTS (SELECT 1 FROM ", quote_identifier(child_table), " AS child",
+        " WHERE ", join_condition, ")"
+      )
+    )$n[[1]]
+
+    orphan_child_rows <- DBI::dbGetQuery(
+      con,
+      paste0(
+        "SELECT COUNT(*) AS n FROM ", quote_identifier(child_table), " AS child",
+        " WHERE NOT EXISTS (SELECT 1 FROM ", quote_identifier(parent_table), " AS parent",
+        " WHERE ", join_condition, ")"
+      )
+    )$n[[1]]
+
+    children_per_parent <- DBI::dbGetQuery(
+      con,
+      paste0(
+        "SELECT COUNT(*) AS n FROM ", quote_identifier(child_table),
+        " GROUP BY ", paste(keys_quoted, collapse = ", ")
+      )
+    )$n
+
+    rows[[length(rows) + 1L]] <- data.frame(
+      parent_table = parent_table,
+      child_table = child_table,
+      join_keys = RELATIONSHIP_ONTOLOGY$join_keys[[index]],
+      declared_cardinality = RELATIONSHIP_ONTOLOGY$declared_cardinality[[index]],
+      parent_rows = as.integer(parent_rows),
+      child_rows = as.integer(child_rows),
+      parents_with_children = as.integer(parents_with_children),
+      parents_without_children = as.integer(parent_rows - parents_with_children),
+      orphan_child_rows = as.integer(orphan_child_rows),
+      min_children_per_parent = if (length(children_per_parent) > 0) as.integer(min(children_per_parent)) else NA_integer_,
+      median_children_per_parent = if (length(children_per_parent) > 0) stats::median(children_per_parent) else NA_real_,
+      mean_children_per_parent = if (length(children_per_parent) > 0) round(mean(children_per_parent), 2) else NA_real_,
+      max_children_per_parent = if (length(children_per_parent) > 0) as.integer(max(children_per_parent)) else NA_integer_,
+      stringsAsFactors = FALSE
+    )
+  }
+
+  bind_rows_safe(rows)
+}
+
+profile_vocabulary_inventory <- function(con) {
+  rows <- list()
+
+  for (index in seq_len(nrow(VOCABULARY_ONTOLOGY))) {
+    table_name <- VOCABULARY_ONTOLOGY$table_name[[index]]
+    column_name <- VOCABULARY_ONTOLOGY$column_name[[index]]
+    column_quoted <- quote_identifier(column_name)
+
+    values <- DBI::dbGetQuery(
+      con,
+      paste0(
+        "SELECT ", column_quoted, " AS term_value,",
+        " COUNT(*) AS n_rows,",
+        " COUNT(DISTINCT \"study_id\") AS n_studies",
+        " FROM ", quote_identifier(table_name),
+        " GROUP BY ", column_quoted,
+        " ORDER BY n_rows DESC, term_value"
+      )
+    )
+
+    if (nrow(values) == 0) {
+      next
+    }
+
+    rows[[length(rows) + 1L]] <- data.frame(
+      table_name = table_name,
+      column_name = column_name,
+      vocabulary_label = VOCABULARY_ONTOLOGY$vocabulary_label[[index]],
+      term_rank = seq_len(nrow(values)),
+      term_value = ifelse(is.na(values$term_value), "(missing)", as.character(values$term_value)),
+      n_rows = as.integer(values$n_rows),
+      n_studies = as.integer(values$n_studies),
+      stringsAsFactors = FALSE
+    )
+  }
+
+  bind_rows_safe(rows)
+}
+
+profile_ontology <- function(db_path = DEFAULT_DB_PATH, ontology_dir = DEFAULT_ONTOLOGY_DIR) {
+  if (!file.exists(db_path)) {
+    stop("Cannot profile a database that does not exist: ", db_path)
+  }
+
+  if (!dir.exists(ontology_dir)) {
+    dir.create(ontology_dir, recursive = TRUE)
+  }
+
+  profile_con <- DBI::dbConnect(RSQLite::SQLite(), db_path)
+  on.exit(DBI::dbDisconnect(profile_con), add = TRUE)
+
+  table_profile <- profile_table_inventory(profile_con)
+  column_profile <- profile_column_inventory(profile_con)
+  relationship_profile <- profile_relationship_inventory(profile_con)
+  vocabulary_profile <- profile_vocabulary_inventory(profile_con)
+
+  latest_run <- DBI::dbGetQuery(
+    profile_con,
+    paste(
+      "SELECT run_id, started_at_utc, completed_at_utc, base_url,",
+      "page_size, expected_total_studies, extracted_inventory_studies,",
+      "extracted_detail_studies, status",
+      "FROM extraction_runs ORDER BY started_at_utc DESC LIMIT 1"
+    )
+  )
+
+  provenance <- data.frame(
+    generated_at_utc = now_utc(),
+    database_path = db_path,
+    database_bytes = as.numeric(file.info(db_path)$size),
+    sqlite_version = as.character(DBI::dbGetQuery(profile_con, "SELECT sqlite_version() AS v")$v[[1]]),
+    profiled_table_count = nrow(table_profile),
+    profiled_row_count = sum(table_profile$row_count),
+    profiled_column_count = nrow(column_profile),
+    latest_run,
+    stringsAsFactors = FALSE
+  )
+
+  artifacts <- list(
+    "ontology-provenance.csv" = provenance,
+    "ontology-tables.csv" = table_profile,
+    "ontology-columns.csv" = column_profile,
+    "ontology-relationships.csv" = relationship_profile,
+    "ontology-vocabularies.csv" = vocabulary_profile
+  )
+
+  for (artifact_name in names(artifacts)) {
+    utils::write.csv(
+      artifacts[[artifact_name]],
+      file = file.path(ontology_dir, artifact_name),
+      row.names = FALSE,
+      na = "",
+      fileEncoding = "UTF-8"
+    )
+  }
+
+  invisible(artifacts)
+}
+
 # ---- execute-extraction ------------------------------------------------------
 arguments <- parse_args(commandArgs(trailingOnly = TRUE))
 invisible(ensure_parent_dir(arguments$db_path))
@@ -713,3 +1206,19 @@ cat("\nInventory summaries written: ", nrow(inventory_frame), sep = "")
 cat("\nStudy details written: ", nrow(study_frame), sep = "")
 cat("\nPopulations written: ", ifelse(is.null(population_frame), 0L, nrow(population_frame)), sep = "")
 cat("\nData collection events written: ", ifelse(is.null(dce_frame), 0L, nrow(dce_frame)), sep = "")
+
+# ---- profile-ontology --------------------------------------------------------
+# A bounded validation run does not describe the catalogue, so it must not
+# overwrite the published ontology artifacts unless a directory is named.
+ontology_is_representative <- !is.finite(arguments$max_studies) ||
+  isTRUE(arguments$ontology_dir_explicit)
+
+if (ontology_is_representative) {
+  invisible(profile_ontology(
+    db_path = arguments$db_path,
+    ontology_dir = arguments$ontology_dir
+  ))
+  cat("\nOntology artifacts written to: ", arguments$ontology_dir, sep = "")
+} else {
+  cat("\nOntology profiling skipped for bounded run; pass --ontology-dir to force.")
+}
