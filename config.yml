@@ -22,7 +22,10 @@ default:
       # Add connection string if using external database:
       # connection_string: "sqlite:///path/to/your/database.sqlite"
     maelstrom_catalog:
+      # Ferry output: normalized transport of the public catalogue API
       staging: "./data-private/derived/maelstrom/maelstrom-catalog.sqlite"
+      # Ellis output: analysis-ready harmonization rectangles
+      analytic: "./data-private/derived/maelstrom/maelstrom-analytic.sqlite"
 
   # Basic project configuration
   directories:
@@ -32,3 +35,5 @@ default:
     analysis: "./analysis/"
     derived: "./data-private/derived/"
     raw: "./data-private/raw/"
+    ellis_parquet: "./data-private/derived/ellis/"
+    ellis_ontology: "./data-public/metadata/ellis-ontology/"

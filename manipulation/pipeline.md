@@ -3,9 +3,11 @@
 ## Purpose
 
 The pipeline creates a reproducible local metadata store for exploring harmonization
-potential across individual studies in the Maelstrom Research catalogue. The current
-implementation is a Ferry lane: it transports public API metadata into a normalized
-SQLite staging database without making analytical harmonization decisions.
+potential across individual studies in the Maelstrom Research catalogue. A Ferry lane
+transports public API metadata into a normalized SQLite staging database without making
+analytical decisions. An Ellis lane then derives the analysis-ready rectangles and the one
+opinionated judgement the project needs: whether a study is relevant to dementia and
+cognitive decline.
 
 ## Architecture
 
@@ -14,45 +16,63 @@ flowchart LR
     inventory[Maelstrom study inventory API]
     details[Maelstrom study detail API]
     ferry[0-ferry-extract.R]
-    schema[maelstrom-catalog-schema.sql]
-    build[maelstrom-catalog.sqlite.building]
+    ferrySchema[maelstrom-catalog-schema.sql]
     cache[maelstrom-catalog.sqlite]
-    ontology[ferry-ontology CSV profiles]
-    manifest[INPUT-manifest.md]
-    ellis[Future Ellis lane]
+    ferryOntology[ferry-ontology CSV profiles]
+    inputManifest[INPUT-manifest.md]
+    ellis[1-ellis-1.R]
+    ellisSchema[maelstrom-analytic-schema.sql]
+    analytic[maelstrom-analytic.sqlite]
+    parquet[ellis parquet mirrors]
+    ellisOntology[ellis-ontology CSV profiles]
+    cacheManifest[CACHE-manifest.md]
     analysis[Harmonization analyses]
 
     inventory --> ferry
     details --> ferry
-    schema --> ferry
-    ferry --> build
-    build -->|Atomic promotion| cache
-    cache --> ontology
-    ontology --> manifest
-    cache -.-> ellis
-    ellis -.-> analysis
+    ferrySchema --> ferry
+    ferry -->|Atomic promotion| cache
+    cache --> ferryOntology
+    ferryOntology --> inputManifest
+    cache --> ellis
+    ellisSchema --> ellis
+    ellis -->|Atomic promotion| analytic
+    ellis --> parquet
+    analytic --> ellisOntology
+    ellisOntology --> cacheManifest
+    parquet -.-> analysis
+    analytic -.-> analysis
 ```
 
-Solid arrows are implemented. Dotted arrows mark planned work.
+Solid arrows are implemented. Dotted arrows mark downstream consumption that lives in
+`analysis/`.
 
 ## Current Artifacts
 
 | Artifact | Role |
 | --- | --- |
 | `manipulation/0-ferry-extract.R` | Queries the public APIs, orchestrates SQLite generation, and profiles the result |
-| `manipulation/maelstrom-catalog-schema.sql` | Declares tables, keys, and indexes |
-| `config.yml` | Declares the canonical SQLite output path |
-| `data-private/derived/maelstrom/maelstrom-catalog.sqlite` | Current Ferry staging database |
-| `data-public/metadata/ferry-ontology/` | Deterministic table, column, relationship, and vocabulary profiles |
+| `manipulation/maelstrom-catalog-schema.sql` | Declares the staging tables, keys, and indexes |
+| `manipulation/1-ellis-1.R` | Derives the analytic rectangles, screens for dementia relevance, and profiles the result |
+| `manipulation/maelstrom-analytic-schema.sql` | Declares the analytic tables, keys, view, and indexes |
+| `manipulation/pipeline-validation.dcf` | Binds the CACHE manifest validator to `study_profile` |
+| `config.yml` | Declares both canonical SQLite paths and the derived directories |
+| `data-private/derived/maelstrom/maelstrom-catalog.sqlite` | Ferry staging database |
+| `data-private/derived/maelstrom/maelstrom-analytic.sqlite` | Ellis analytic database |
+| `data-private/derived/ellis/*.parquet` | Type-preserving mirrors of every analytic rectangle |
+| `data-public/metadata/ferry-ontology/` | Staging table, column, relationship, and vocabulary profiles |
+| `data-public/metadata/ellis-ontology/` | Analytic profiles plus the delivered screening funnel |
 | `data-public/metadata/INPUT-manifest.md` | Human-readable description of the staging database |
+| `data-public/metadata/CACHE-manifest.md` | Human-readable description of the analytic store |
 | `manipulation/pipeline-project-spec.md` | Defines source, lane, output, and validation contracts |
 
 ## Execution
 
-Run from the repository root:
+Run from the repository root, in order:
 
 ```powershell
 Rscript ./manipulation/0-ferry-extract.R
+Rscript ./manipulation/1-ellis-1.R
 ```
 
 The script reads the target path from `config.yml`, retrieves the complete current
@@ -72,7 +92,7 @@ To regenerate only the profiles from an existing database, without contacting th
 Rscript -e "src <- readLines('./manipulation/0-ferry-extract.R'); i <- grep('^# ---- execute-extraction', src)[1]; eval(parse(text = paste(src[seq_len(i - 1L)], collapse = '\n'))); profile_ontology()"
 ```
 
-## Diagnostic Checkpoints
+## Diagnostic Checkpoints — Ferry
 
 After a complete rebuild, inspect the latest run:
 
@@ -113,6 +133,57 @@ SELECT 'dce_biosamples', COUNT(*)
 FROM dce_biosamples;
 ```
 
+## Diagnostic Checkpoints — Ellis
+
+Against `maelstrom-analytic.sqlite`. Confirm the run and its source:
+
+```sql
+SELECT
+  ellis_run_id,
+  ferry_run_id,
+  studies_in,
+  studies_out,
+  studies_in_frame,
+  status
+FROM ellis_runs
+ORDER BY started_at_utc DESC
+LIMIT 1;
+```
+
+Read the screening funnel:
+
+```sql
+SELECT step, criterion, n_remaining, n_excluded
+FROM screening_flow
+ORDER BY step;
+```
+
+Cross the relevance tier against frame membership:
+
+```sql
+SELECT relevance_tier, flag_in_frame, COUNT(*) AS n_studies
+FROM study_profile
+GROUP BY relevance_tier, flag_in_frame
+ORDER BY relevance_tier, flag_in_frame;
+```
+
+Audit why any single study was or was not screened in:
+
+```sql
+SELECT concept, term_label, source_field, n_hits, first_snippet
+FROM screening_evidence
+WHERE study_id = 'h-70'
+ORDER BY concept, term_label;
+```
+
+Confirm the frame view agrees with the spine:
+
+```sql
+SELECT
+  (SELECT COUNT(*) FROM dementia_frame) AS frame_rows,
+  (SELECT COUNT(*) FROM study_profile WHERE flag_in_frame = 1) AS spine_in_frame;
+```
+
 ## Current Baseline
 
 The first complete extraction on 2026-07-27 produced:
@@ -132,17 +203,52 @@ public catalogue should be preserved and investigated, not forced back to these 
 The machine-readable form of this baseline is `ontology-tables.csv`; diff it after a run
 to see exactly what moved.
 
+The first complete Ellis run on 2026-07-28 produced:
+
+| Object | Rows |
+| --- | ---: |
+| `study_profile` | 455 |
+| `study_population` | 998 |
+| `study_wave` | 6,482 |
+| `study_domain` | 8,190 |
+| `screening_evidence` | 1,025 |
+| `concept_lexicon` | 37 |
+| `dementia_frame` (view) | 155 |
+
+The machine-readable forms are `cache-tables.csv` and `cache-screening-flow.csv`.
+
 ## Failure Behavior
 
-- API or parsing failures stop the run before replacing the canonical database.
-- Database construction occurs in a `.building` file.
+- API or parsing failures stop the Ferry run before replacing the canonical database.
+- Database construction occurs in a `.building` file in both lanes.
 - A successful transaction and database disconnect are required before promotion.
 - A stale `.building` file is removed at the beginning of the next run.
+- The Ellis lane stops if no `status = 'completed'` Ferry run exists.
+- The Ellis lane refuses to write a rectangle whose columns disagree with
+  `maelstrom-analytic-schema.sql`, naming the difference in both directions.
+- Ellis integrity assertions (key uniqueness, referential coverage, wave parity, funnel
+  arithmetic) run before any database connection is opened.
+
+## Manifest Validation
+
+`manipulation/pipeline-validation.dcf` binds the `validate-cache-manifest` skill to the
+`study_profile` parquet mirror:
+
+```powershell
+Rscript -e "source('.github/skills/validate-cache-manifest/scripts/validate-cache-manifest.R')"
+```
+
+The report is written to `data-private/derived/manifest-validation/validation-report.md`.
+As of 2026-07-28 it reports 69 physical columns, 69 documented, 0 undocumented, 0 phantom.
 
 ## Next Lane
 
-The next pipeline milestone is an Ellis lane that standardizes the Ferry metadata for
-comparative analysis. Candidate outputs include study-by-domain coverage matrices,
-longitudinal depth measures, geography and recruitment taxonomies, and transparent
-harmonization-opportunity scores. The Ellis design and validation target remain to be
-specified.
+`1-ellis-1.R` screens and describes studies. It deliberately stops short of comparing
+them. The next milestone is a second Ellis lane that consumes `dementia_frame` and
+materializes pairwise harmonization potential — research-area Jaccard overlap, shared
+countries, overlapping calendar windows, and comparable instrument coverage — so that
+"these two studies could be pooled" becomes a measured claim rather than an impression.
+
+Going deeper than study-level metadata would require the Maelstrom variable-level API,
+which is outside the current Ferry scope. Extending the Ferry is the prerequisite for any
+instrument-level harmonization measure.

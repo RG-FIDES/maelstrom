@@ -1,0 +1,21 @@
+target_type: parquet
+target_path: data-private/derived/ellis/study_profile.parquet
+database_label: maelstrom-analytic
+target_object: study_profile
+target_label: study_profile (Maelstrom harmonization study spine)
+manifest_path: data-public/metadata/CACHE-manifest.md
+report_path: data-private/derived/manifest-validation/validation-report.md
+exclude_mode: none
+notes: The canonical analysis-ready rectangle is study_profile, delivered both as a
+ SQLite table in data-private/derived/maelstrom/maelstrom-analytic.sqlite and as a
+ parquet mirror. The parquet mirror is the validation target because it needs no DSN
+ and preserves the R types the SQLite contract cannot hold.
+ .
+ The dementia_frame view shares study_profile's columns exactly and therefore needs no
+ separate binding.
+ .
+ The validator collects documented columns from every markdown table whose first header
+ cell reads "Column". In CACHE-manifest.md only the study_profile sections use that
+ header; the companion rectangles (study_population, study_wave, study_domain,
+ screening_evidence) use "Field" so their columns are not misread as phantom entries
+ against this target.

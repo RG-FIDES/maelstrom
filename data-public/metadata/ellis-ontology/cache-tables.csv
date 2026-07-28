@@ -1,0 +1,10 @@
+"table_group","table_name","object_type","grain","row_count","column_count","primary_key"
+"1-run-provenance","ellis_runs","table","one row per Ellis run",1,15,"ellis_run_id"
+"2-screening-apparatus","concept_lexicon","table","one row per run, concept, and lexicon term",37,7,"ellis_run_id|concept|term_label"
+"2-screening-apparatus","screening_evidence","table","one row per run, study, concept, term, and source field",1025,7,"ellis_run_id|study_id|concept|term_label|source_field"
+"2-screening-apparatus","screening_flow","table","one row per run and screening step",4,6,"ellis_run_id|step"
+"3-study-spine","study_profile","table","one row per run and study",455,69,"ellis_run_id|study_id"
+"4-population-layer","study_population","table","one row per run, study, and population",998,23,"ellis_run_id|study_id|population_id"
+"5-wave-layer","study_wave","table","one row per run, study, population, and data collection event",6482,22,"ellis_run_id|study_id|population_id|dce_id"
+"6-coverage-matrix","study_domain","table","one row per run, study, and research area",8190,6,"ellis_run_id|study_id|area_code"
+"7-analytic-frame","dementia_frame","view","one row per run and in-frame study",155,69,

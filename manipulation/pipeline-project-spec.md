@@ -3,9 +3,10 @@
 ## Project Purpose
 
 This pipeline acquires public metadata for all individual studies declared by the
-Maelstrom Research catalogue. It preserves the source API payloads and materializes
-normalized SQLite tables for subsequent assessment of cross-study harmonization
-potential.
+Maelstrom Research catalogue. It preserves the source API payloads, materializes
+normalized SQLite tables, and derives analysis-ready rectangles for assessing the
+harmonization potential of longitudinal studies relevant to dementia and cognitive
+decline.
 
 ## Source System
 
@@ -27,11 +28,15 @@ initiatives are outside the current extraction scope.
 | Order | Lane | File | Input | Output | Status |
 | --- | --- | --- | --- | --- | --- |
 | 0 | Ferry | `manipulation/0-ferry-extract.R` | Public Maelstrom APIs | Staging SQLite database | Active |
-| 1 | Ellis | Not yet implemented | Ferry SQLite database | Harmonization-ready relational views or tables | Planned |
+| 1 | Ellis | `manipulation/1-ellis-1.R` | Ferry staging database | Analytic SQLite database, parquet mirrors, ontology profiles | Active |
 
-The schema companion `manipulation/maelstrom-catalog-schema.sql` is executed by the
-Ferry lane when constructing the SQLite database. It is version-controlled separately
-so the physical data contract can be inspected without reading the R orchestration.
+Each lane has a version-controlled schema companion executed at build time, so the
+physical data contract can be inspected without reading the R orchestration:
+
+| Lane | Schema companion |
+| --- | --- |
+| `0-ferry-extract.R` | `manipulation/maelstrom-catalog-schema.sql` |
+| `1-ellis-1.R` | `manipulation/maelstrom-analytic-schema.sql` |
 
 ## Ferry Contract
 
@@ -99,7 +104,7 @@ is passed explicitly.
 | `dce_data_sources` | One row per event-source pairing | Questionnaires, measures, databases, and other sources |
 | `dce_biosamples` | One row per event-biosample pairing | Biosample availability by event |
 
-## Rebuild Contract
+## Rebuild Contract — Ferry
 
 Run the Ferry lane from the repository root:
 
@@ -121,7 +126,7 @@ Rscript ./manipulation/0-ferry-extract.R `
   --page-size=3
 ```
 
-## Validation Expectations
+## Ferry Validation Expectations
 
 Every complete Ferry run must satisfy these checks:
 
@@ -135,20 +140,108 @@ The observed baseline on 2026-07-27 is 455 individual studies. This is a source
 observation, not a hard-coded invariant: future runs must preserve the current API total
 and report changes.
 
-## Planned Ellis Boundary
+## Ellis Contract
 
-The future Ellis lane will consume the Ferry database and may create standardized
-harmonization features, study eligibility rules, topic coverage matrices, overlap scores,
-and analytical views. Those semantic transformations must not be added to
-`0-ferry-extract.R`.
+### Ellis Inputs
 
-## Pending Companion Artifacts
+- The latest `status = 'completed'` run in the Ferry staging database, read through
+  `database.maelstrom_catalog.staging`.
+- The local schema in `manipulation/maelstrom-analytic-schema.sql`.
+- The target path in `config.yml` at `database.maelstrom_catalog.analytic`.
 
-The following stable-contract artifacts will be created when the Ellis target is defined:
+### Required Processing
 
-- `data-public/metadata/CACHE-manifest.md`;
-- `manipulation/pipeline-validation.dcf`;
-- at least one numbered Ellis lane.
+The Ellis lane owns every semantic decision in the pipeline:
 
-`data-public/metadata/INPUT-manifest.md` is complete and describes the Ferry staging
-database as delivered on 2026-07-27.
+- aggregates data collection events into wave, population, and study rectangles;
+- applies readable factor taxonomies to source design codes and derived tiers;
+- derives longitudinal depth, age reach, geography, and measurement-source coverage;
+- crosses studies against research areas to produce a complete coverage matrix;
+- screens free text against a version-controlled concept lexicon;
+- scores dementia and cognitive-decline relevance and assigns a tier;
+- records the screening funnel and the evidence behind every textual signal.
+
+The lane makes exactly one opinionated judgement — whether a study is relevant to dementia
+or cognitive decline — and materializes the evidence for it in `screening_evidence`.
+
+### Ellis Outputs
+
+| Artifact | Contents |
+| --- | --- |
+| `data-private/derived/maelstrom/maelstrom-analytic.sqlite` | 8 tables and the `dementia_frame` view |
+| `data-private/derived/ellis/*.parquet` | Type-preserving mirrors of every rectangle plus `dementia_frame` |
+| `data-public/metadata/ellis-ontology/*.csv` | Provenance, tables, columns, relationships, vocabularies, screening flow |
+| `data-public/metadata/CACHE-manifest.md` | Human-readable description of the delivered store |
+
+The analytic database is rebuilt atomically using the same `.building` promotion the
+Ferry lane uses.
+
+### Analytic Rectangle Contract
+
+| Object | Grain | Purpose |
+| --- | --- | --- |
+| `ellis_runs` | One row per Ellis run | Run and source provenance |
+| `concept_lexicon` | One row per concept and term | The exact patterns the run used |
+| `screening_evidence` | One row per study, concept, term, and field | Auditable basis for every textual signal |
+| `screening_flow` | One row per screening step | The exclusion funnel |
+| `study_profile` | One row per study | The 69-column analytic spine |
+| `study_population` | One row per study population | Age, geography, recruitment, follow-up window |
+| `study_wave` | One row per data collection event | Temporal spine and instrument coverage |
+| `study_domain` | One row per study and research area | Complete coverage matrix |
+| `dementia_frame` | One row per in-frame study | View over `study_profile` where `flag_in_frame = 1` |
+
+### Frame Definition
+
+Frame membership is a three-step funnel recorded in `screening_flow` and reproduced in
+`data-public/metadata/CACHE-manifest.md`:
+
+1. relevance tier is `probable` or `core`;
+2. the study has at least two data collection events;
+3. the study declares `cognitive_measures` at an event or matches a dementia lexicon term.
+
+Studies failing any step remain in `study_profile` with `flag_in_frame = 0` and a populated
+`frame_exclusion_reason`, so an alternative frame definition needs no re-run.
+
+### Ellis Validation Expectations
+
+Every complete Ellis run must satisfy these checks, all asserted in the lane:
+
+- `study_profile` has exactly one row per Ferry study, with no duplicate `study_id`;
+- every `study_population` and `screening_evidence` row resolves to a study;
+- every `study_wave` row resolves to a population;
+- `study_domain` is a complete study-by-area rectangle;
+- `relevance_tier` is never missing;
+- `flag_in_frame` equals the conjunction of its three criteria;
+- `frame_exclusion_reason` is NA exactly when `flag_in_frame` is TRUE;
+- `screening_flow` ends at the frame size;
+- `n_waves` on the spine equals the `study_wave` rows delivered for that study;
+- every rectangle's columns match `maelstrom-analytic-schema.sql` exactly, checked before
+  the write so drift is reported as a named column difference.
+
+The observed baseline on 2026-07-28 is 455 studies profiled and 155 in the frame.
+
+## Rebuild Contract — Ellis
+
+```powershell
+Rscript ./manipulation/1-ellis-1.R
+```
+
+For a scratch run that does not replace the canonical store:
+
+```powershell
+Rscript ./manipulation/1-ellis-1.R `
+  --target-db=./data-private/derived/maelstrom/test-maelstrom-analytic.sqlite `
+  --parquet-dir=./data-private/derived/ellis-test/ `
+  --ontology-dir=./data-private/derived/ellis-test-ontology/
+```
+
+## Companion Artifacts
+
+All stable-contract artifacts now exist:
+
+| Artifact | Status |
+| --- | --- |
+| `data-public/metadata/INPUT-manifest.md` | Populated from the 2026-07-27 Ferry run |
+| `data-public/metadata/CACHE-manifest.md` | Populated from the 2026-07-28 Ellis run |
+| `manipulation/pipeline-validation.dcf` | Bound to `data-private/derived/ellis/study_profile.parquet` |
+| `manipulation/1-ellis-1.R` | Active |

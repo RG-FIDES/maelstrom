@@ -1,0 +1,2 @@
+"ellis_run_id","ferry_run_id","profiled_at_utc","source_db_path","target_db_path","target_db_bytes","sqlite_version","object_count","column_count","row_count","studies_profiled","studies_in_frame","lexicon_terms","evidence_rows"
+"ellis-20260728T015434","maelstrom-20260727T174615","2026-07-28 01:54:36 UTC","./data-private/derived/maelstrom/maelstrom-catalog.sqlite","./data-private/derived/maelstrom/maelstrom-analytic.sqlite",4222976,"3.53.1",9,224,17192,455,155,37,1025

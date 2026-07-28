@@ -1,0 +1,5 @@
+"ellis_run_id","step","criterion","definition","n_remaining","n_excluded"
+"ellis-20260728T015434",0,"All individual studies in the Ferry run","One row per study in the completed Ferry extraction",455,0
+"ellis-20260728T015434",1,"Relevance tier is 'probable' or 'core'","relevance_score >= 3 or any dementia lexicon hit",172,283
+"ellis-20260728T015434",2,"Longitudinal design","n_waves >= 2 data collection events",165,7
+"ellis-20260728T015434",3,"Cognitive measurement evidence","cognitive_measures declared at an event, or a dementia lexicon hit",155,10

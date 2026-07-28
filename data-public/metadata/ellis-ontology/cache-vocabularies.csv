@@ -1,0 +1,107 @@
+"table_name","column_name","vocabulary_label","term_value","n_rows"
+"study_profile","design_code","source study design taxonomy","cohort_study",304
+"study_profile","design_code","source study design taxonomy","registry",71
+"study_profile","design_code","source study design taxonomy","cross_sectional",40
+"study_profile","design_code","source study design taxonomy","clinical_trial",15
+"study_profile","design_code","source study design taxonomy","case_control",15
+"study_profile","design_code","source study design taxonomy","other",9
+"study_profile","design_code","source study design taxonomy","case_only",1
+"study_profile","design_label","readable study design label","Cohort study",304
+"study_profile","design_label","readable study design label","Registry",71
+"study_profile","design_label","readable study design label","Cross-sectional",40
+"study_profile","design_label","readable study design label","Clinical trial",15
+"study_profile","design_label","readable study design label","Case-control",15
+"study_profile","design_label","readable study design label","Other",9
+"study_profile","design_label","readable study design label","Case only",1
+"study_profile","relevance_tier","dementia relevance tier","unrelated",225
+"study_profile","relevance_tier","dementia relevance tier","probable",94
+"study_profile","relevance_tier","dementia relevance tier","core",78
+"study_profile","relevance_tier","dementia relevance tier","possible",58
+"study_profile","frame_exclusion_reason","first failing frame criterion","Relevance tier below 'probable'",283
+"study_profile","frame_exclusion_reason","first failing frame criterion",,155
+"study_profile","frame_exclusion_reason","first failing frame criterion","No declared cognitive instrument and no dementia text",10
+"study_profile","frame_exclusion_reason","first failing frame criterion","Fewer than two data collection events",7
+"study_profile","primary_country","most frequent population country","CAN",232
+"study_profile","primary_country","most frequent population country","USA",59
+"study_profile","primary_country","most frequent population country","SWE",45
+"study_profile","primary_country","most frequent population country","GBR",24
+"study_profile","primary_country","most frequent population country","DEU",13
+"study_profile","primary_country","most frequent population country","CHE",12
+"study_profile","primary_country","most frequent population country","NLD",8
+"study_profile","primary_country","most frequent population country","AUS",8
+"study_profile","primary_country","most frequent population country","CHN",7
+"study_profile","primary_country","most frequent population country","ITA",5
+"study_profile","primary_country","most frequent population country","ESP",5
+"study_profile","primary_country","most frequent population country","JPN",4
+"study_profile","primary_country","most frequent population country","FRA",4
+"study_profile","primary_country","most frequent population country","FIN",4
+"study_profile","primary_country","most frequent population country","DNK",4
+"study_profile","primary_country","most frequent population country","GRC",3
+"study_profile","primary_country","most frequent population country","NZL",2
+"study_profile","primary_country","most frequent population country","IND",2
+"study_profile","primary_country","most frequent population country","ZAF",1
+"study_profile","primary_country","most frequent population country","TWN",1
+"study_profile","primary_country","most frequent population country","PHL",1
+"study_profile","primary_country","most frequent population country","NOR",1
+"study_profile","primary_country","most frequent population country","KOR",1
+"study_profile","primary_country","most frequent population country","ISL",1
+"study_profile","primary_country","most frequent population country","IRL",1
+"study_profile","primary_country","most frequent population country","IDN",1
+"study_profile","primary_country","most frequent population country","CZE",1
+"study_profile","primary_country","most frequent population country","CAF",1
+"study_profile","primary_country","most frequent population country","BRA",1
+"study_profile","primary_country","most frequent population country","AUT",1
+"study_profile","primary_country","most frequent population country","ARG",1
+"study_profile","primary_country","most frequent population country","ALB",1
+"study_profile","access_data","data access channel","yes",415
+"study_profile","access_data","data access channel","no",33
+"study_profile","access_data","data access channel",,4
+"study_profile","access_data","data access channel","na",3
+"study_profile","access_biosamples","biosample access channel","no",173
+"study_profile","access_biosamples","biosample access channel","na",139
+"study_profile","access_biosamples","biosample access channel","yes",136
+"study_profile","access_biosamples","biosample access channel",,7
+"study_profile","access_other","other access channel","na",390
+"study_profile","access_other","other access channel","yes",30
+"study_profile","access_other","other access channel",,19
+"study_profile","access_other","other access channel","no",16
+"study_profile","flag_longitudinal","two or more data collection events","1",391
+"study_profile","flag_longitudinal","two or more data collection events","0",64
+"study_profile","flag_in_frame","analytic frame membership","0",300
+"study_profile","flag_in_frame","analytic frame membership","1",155
+"study_profile","flag_older_adult_reach","recruitment reaches later life","0",294
+"study_profile","flag_older_adult_reach","recruitment reaches later life","1",161
+"study_domain","area_code","Maelstrom research area","Symptoms_signs",455
+"study_domain","area_code","Maelstrom research area","Sociodemographic_economic_characteristics",455
+"study_domain","area_code","Maelstrom research area","Social_environment",455
+"study_domain","area_code","Maelstrom research area","Reproduction",455
+"study_domain","area_code","Maelstrom research area","Preschool_school_work",455
+"study_domain","area_code","Maelstrom research area","Physical_measures",455
+"study_domain","area_code","Maelstrom research area","Physical_environment",455
+"study_domain","area_code","Maelstrom research area","Non_pharmacological_interventions",455
+"study_domain","area_code","Maelstrom research area","Medication_supplements",455
+"study_domain","area_code","Maelstrom research area","Lifestyle_behaviours",455
+"study_domain","area_code","Maelstrom research area","Life_events_plans_beliefs",455
+"study_domain","area_code","Maelstrom research area","Laboratory_measures",455
+"study_domain","area_code","Maelstrom research area","Health_status_functional_limitations",455
+"study_domain","area_code","Maelstrom research area","Health_community_care_utilization",455
+"study_domain","area_code","Maelstrom research area","End_of_life",455
+"study_domain","area_code","Maelstrom research area","Diseases",455
+"study_domain","area_code","Maelstrom research area","Cognitive_psychological_measures",455
+"study_domain","area_code","Maelstrom research area","Administrative_information",455
+"concept_lexicon","concept","screening concept","dementia",12
+"concept_lexicon","concept","screening concept","cognition",10
+"concept_lexicon","concept","screening concept","brain",8
+"concept_lexicon","concept","screening concept","ageing",7
+"concept_lexicon","match_mode","regex matching mode","substring",31
+"concept_lexicon","match_mode","regex matching mode","word",6
+"screening_evidence","concept","screening concept","cognition",484
+"screening_evidence","concept","screening concept","ageing",267
+"screening_evidence","concept","screening concept","dementia",237
+"screening_evidence","concept","screening concept","brain",37
+"screening_evidence","source_field","field the term was found in","event_text",559
+"screening_evidence","source_field","field the term was found in","study_objectives",309
+"screening_evidence","source_field","field the term was found in","study_name",85
+"screening_evidence","source_field","field the term was found in","population_text",38
+"screening_evidence","source_field","field the term was found in","study_follow_up_info",20
+"screening_evidence","source_field","field the term was found in","study_methods_info",14
