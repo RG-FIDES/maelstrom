@@ -11,41 +11,79 @@ cognitive decline.
 
 ## Architecture
 
+Two lanes, each with the same four-part anatomy: a version-controlled schema declaring the
+physical contract, a script that builds into a `.building` file, an atomic promotion, and a
+self-profiling step that writes the CSV evidence its manifest is required to quote.
+
+<!-- PIPELINE-DIAGRAM-SOURCE -->
+
 ```mermaid
 flowchart LR
-    inventory[Maelstrom study inventory API]
-    details[Maelstrom study detail API]
-    ferry[0-ferry-extract.R]
-    ferrySchema[maelstrom-catalog-schema.sql]
-    cache[maelstrom-catalog.sqlite]
-    ferryOntology[ferry-ontology CSV profiles]
-    inputManifest[INPUT-manifest.md]
-    ellis[1-ellis-1.R]
-    ellisSchema[maelstrom-analytic-schema.sql]
-    analytic[maelstrom-analytic.sqlite]
-    parquet[ellis parquet mirrors]
-    ellisOntology[ellis-ontology CSV profiles]
-    cacheManifest[CACHE-manifest.md]
-    analysis[Harmonization analyses]
+    subgraph source["SOURCE"]
+        api["Maelstrom Catalogue API<br/><i>inventory + detail</i>"]
+    end
 
-    inventory --> ferry
-    details --> ferry
-    ferrySchema --> ferry
-    ferry -->|Atomic promotion| cache
-    cache --> ferryOntology
-    ferryOntology --> inputManifest
-    cache --> ellis
-    ellisSchema --> ellis
-    ellis -->|Atomic promotion| analytic
+    subgraph ferryLane["FERRY — transport only"]
+        ferrySchema[/"maelstrom-catalog-schema.sql"/]
+        ferry["0-ferry-extract.R<br/><i>Extract</i>"]
+        ferrySchema --> ferry
+    end
+
+    staging[("maelstrom-catalog.sqlite<br/><i>12 tables · 455 studies</i>")]
+
+    subgraph ellisLane["ELLIS — all semantic decisions"]
+        ellisSchema[/"maelstrom-analytic-schema.sql"/]
+        ellis["1-ellis-1.R<br/><i>Screen &amp; shape</i>"]
+        ellisSchema --> ellis
+    end
+
+    subgraph store["ANALYTIC STORE"]
+        analytic[("maelstrom-analytic.sqlite<br/><i>8 tables + dementia_frame</i>")]
+        parquet["9 parquet mirrors<br/><i>types preserved</i>"]
+    end
+
+    subgraph evidence["CORROBORATION"]
+        ferryOnt["ferry-ontology/*.csv"] --> inputMan["INPUT-manifest.md"]
+        ellisOnt["ellis-ontology/*.csv"] --> cacheMan["CACHE-manifest.md"]
+        cacheMan --> audit["pipeline-validation.dcf<br/><i>69 / 69 columns</i>"]
+    end
+
+    subgraph downstream["DOWNSTREAM"]
+        eda["analysis/<br/><i>harmonization EDA</i>"]
+        nextLane["2-ellis-*<br/><i>study_pair — deferred</i>"]
+    end
+
+    api --> ferry
+    ferry -->|atomic promotion| staging
+    staging --> ellis
+    ellis -->|atomic promotion| analytic
     ellis --> parquet
-    analytic --> ellisOntology
-    ellisOntology --> cacheManifest
-    parquet -.-> analysis
-    analytic -.-> analysis
+    staging -.->|profiles| ferryOnt
+    analytic -.->|profiles| ellisOnt
+    parquet --> eda
+    analytic --> eda
+    analytic -.-> nextLane
+
+    style api fill:#4a90d9,color:#fff
+    style ferry fill:#4a90d9,color:#fff
+    style ellis fill:#4a90d9,color:#fff
+    style staging fill:#4a90d9,color:#fff
+    style ferrySchema fill:#f5a623,color:#fff
+    style ellisSchema fill:#f5a623,color:#fff
+    style ferryOnt fill:#f5a623,color:#fff
+    style ellisOnt fill:#f5a623,color:#fff
+    style inputMan fill:#f5a623,color:#fff
+    style cacheMan fill:#f5a623,color:#fff
+    style audit fill:#f5a623,color:#fff
+    style analytic fill:#50c878,color:#fff
+    style parquet fill:#50c878,color:#fff
+    style eda fill:#50c878,color:#fff
+    style nextLane fill:#fff,color:#666,stroke:#999,stroke-dasharray: 4 3
 ```
 
-Solid arrows are implemented. Dotted arrows mark downstream consumption that lives in
-`analysis/`.
+Blue is the sequential spine, orange is the declarative and documentary apparatus that
+never carries data, and green is what an analysis may actually consume. Solid arrows move
+data; dashed arrows describe, audit, or point at deferred work.
 
 ## Current Artifacts
 
@@ -65,6 +103,8 @@ Solid arrows are implemented. Dotted arrows mark downstream consumption that liv
 | `data-public/metadata/INPUT-manifest.md` | Human-readable description of the staging database |
 | `data-public/metadata/CACHE-manifest.md` | Human-readable description of the analytic store |
 | `manipulation/pipeline-project-spec.md` | Defines source, lane, output, and validation contracts |
+| `manipulation/images/pipeline-architecture.png` | Rendered architecture diagram (PNG and JPG) |
+| `utility/render-pipeline-diagram.R` | Regenerates the image from the diagram source above |
 
 ## Execution
 

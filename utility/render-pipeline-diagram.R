@@ -8,10 +8,11 @@ library(magick)
 # ---- declare-globals ---------------------------------------------------------
 source_md <- "manipulation/pipeline.md"
 output_jpg <- "manipulation/images/pipeline-architecture.jpg"
+output_png <- "manipulation/images/pipeline-architecture.png"
 
 width_in <- 8.5
-height_in <- 2.5
-dpi <- 150
+min_height_in <- 2.5
+dpi <- 300
 
 # ---- extract-mermaid ---------------------------------------------------------
 lines <- readLines(source_md, warn = FALSE)
@@ -45,7 +46,7 @@ on.exit(suppressWarnings(file.remove(c(tmp_mmd, tmp_png))), add = TRUE)
 writeLines(mermaid_code, tmp_mmd)
 
 width_px <- round(width_in * dpi)
-height_px <- round(height_in * dpi)
+min_height_px <- round(min_height_in * dpi)
 
 cmd <- paste(
   "npx --yes @mermaid-js/mermaid-cli",
@@ -66,8 +67,12 @@ if (rc != 0L) {
 }
 
 # ---- resize-and-export -------------------------------------------------------
+# The canvas pads a short diagram up to the minimum height but never crops a tall
+# one: silently losing the bottom of an architecture diagram is worse than an
+# unusually tall image.
 img <- image_read(tmp_png)
 img <- image_resize(img, geometry_size_pixels(width = width_px))
+height_px <- max(min_height_px, image_info(img)$height)
 img <- image_extent(
   img,
   geometry_size_pixels(width = width_px, height = height_px),
@@ -77,10 +82,12 @@ img <- image_extent(
 
 dir.create(dirname(output_jpg), showWarnings = FALSE, recursive = TRUE)
 image_write(img, path = output_jpg, format = "jpeg", quality = 95)
+image_write(img, path = output_png, format = "png")
 
 message(sprintf(
-  "Pipeline diagram saved to: %s (%d x %d px @ %d dpi)",
+  "Pipeline diagram saved to:\n  %s\n  %s\n  (%d x %d px @ %d dpi)",
   output_jpg,
+  output_png,
   width_px,
   height_px,
   dpi

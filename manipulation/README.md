@@ -2,6 +2,18 @@
 
 Files in this directory manipulate/groom/munge the project data.
 
+## This Project's Pipeline
+
+<!-- PIPELINE-DIAGRAM -->
+![Maelstrom pipeline architecture](images/pipeline-architecture.png)
+
+Two lanes: `0-ferry-extract.R` transports the public catalogue without judgement, and
+`1-ellis-1.R` makes every semantic decision. See [pipeline.md](pipeline.md) for the
+canonical diagram source, execution guide, and diagnostic checkpoints. Regenerate the
+image with `Rscript utility/render-pipeline-diagram.R` after editing the diagram.
+
+## Background: the Patterns
+
 They typically intake raw data from `./data-public/raw` and/or `./data-private/raw` and transform them into tidy objects, which would be convenient to place into literate scripts (e.g. `.Rmd` or `.qmd`) for exploration and annotation. For example, consider a simple project described in [RAnalysisSkeleton](https://github.com/wibeasley/RAnalysisSkeleton), featuring the ubiquitous `cars` data set:
 
 ![](images/flow-skeleton-car.png)
