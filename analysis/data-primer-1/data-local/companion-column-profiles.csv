@@ -1,0 +1,156 @@
+object_name,column_name,r_type,n_non_null,fill_rate,n_distinct,example_value
+ellis_runs,ellis_run_id,character,1,1,1,ellis-20260728T021902
+ellis_runs,ferry_run_id,character,1,1,1,maelstrom-20260728T021329
+ellis_runs,ferry_run_status,character,1,1,1,completed
+ellis_runs,ferry_run_completed_at_utc,character,1,1,1,2026-07-28 02:14:49 UTC
+ellis_runs,started_at_utc,character,1,1,1,2026-07-28 02:19:02 UTC
+ellis_runs,completed_at_utc,character,1,1,1,2026-07-28 02:19:03 UTC
+ellis_runs,source_db_path,character,1,1,1,./data-private/derived/maelstrom/maelstrom-…
+ellis_runs,target_db_path,character,1,1,1,./data-private/derived/maelstrom/maelstrom-…
+ellis_runs,lexicon_concepts,integer,1,1,1,4
+ellis_runs,lexicon_terms,integer,1,1,1,37
+ellis_runs,studies_in,integer,1,1,1,455
+ellis_runs,studies_out,integer,1,1,1,455
+ellis_runs,studies_in_frame,integer,1,1,1,155
+ellis_runs,status,character,1,1,1,completed
+ellis_runs,notes,character,0,0,0,NA
+concept_lexicon,ellis_run_id,character,37,1,1,ellis-20260728T021902
+concept_lexicon,concept,character,37,1,4,dementia
+concept_lexicon,concept_weight,numeric,37,1,4,3
+concept_lexicon,term_label,character,37,1,37,dementia
+concept_lexicon,pattern,character,37,1,37,dementia
+concept_lexicon,match_mode,character,37,1,2,substring
+concept_lexicon,rationale,character,37,1,4,Names the disease spectrum directly; suffic…
+screening_flow,ellis_run_id,character,4,1,1,ellis-20260728T021902
+screening_flow,step,integer,4,1,4,0
+screening_flow,criterion,character,4,1,4,All individual studies in the Ferry run
+screening_flow,definition,character,4,1,4,One row per study in the completed Ferry ex…
+screening_flow,n_remaining,integer,4,1,4,455
+screening_flow,n_excluded,integer,4,1,4,0
+screening_evidence,ellis_run_id,character,1025,1,1,ellis-20260728T021902
+screening_evidence,study_id,character,1025,1,211,3d
+screening_evidence,concept,character,1025,1,4,cognition
+screening_evidence,term_label,character,1025,1,35,cognition or cognitive
+screening_evidence,source_field,character,1025,1,6,event_text
+screening_evidence,n_hits,integer,1025,1,53,26
+screening_evidence,first_snippet,character,1025,1,996,cteristics was collected from questionnaire…
+study_population,ellis_run_id,character,998,1,1,ellis-20260728T021902
+study_population,study_id,character,998,1,455,3d
+study_population,population_id,character,998,1,39,1
+study_population,population_order,integer,998,1,20,1
+study_population,population_name,character,998,1,998,3D - Mothers
+study_population,participant_number,integer,848,0.8496993987975952,637,2456
+study_population,sample_number,integer,526,0.5270541082164328,383,2357
+study_population,minimum_age,integer,658,0.6593186372745491,61,18
+study_population,maximum_age,integer,368,0.3687374749498998,62,47
+study_population,age_span_years,integer,332,0.33266533066132264,61,29
+study_population,flag_newborn,logical,998,1,2,FALSE
+study_population,flag_twins,logical,998,1,2,FALSE
+study_population,flag_older_adult_reach,logical,998,1,2,FALSE
+study_population,n_countries,integer,998,1,9,1
+study_population,primary_country,character,994,0.9959919839679359,44,CAN
+study_population,countries,character,994,0.9959919839679359,51,CAN
+study_population,recruitment_data_sources,character,991,0.9929859719438878,9,specific_population
+study_population,recruitment_general,character,477,0.4779559118236473,6,volunteer
+study_population,recruitment_specific,character,457,0.45791583166332667,5,clinic_patients
+study_population,n_waves,integer,998,1,42,34
+study_population,first_wave_year,integer,998,1,77,2010
+study_population,last_wave_year,integer,998,1,57,2028
+study_population,follow_up_span_years,integer,998,1,61,18
+study_wave,ellis_run_id,character,6483,1,1,ellis-20260728T021902
+study_wave,study_id,character,6483,1,455,3d
+study_wave,population_id,character,6483,1,39,1
+study_wave,dce_id,character,6483,1,88,1
+study_wave,wave_name,character,6483,1,6190,3D - Mothers - Prenatal visit 1 (8 to 14 we…
+study_wave,wave_order_study,integer,6483,1,193,1
+study_wave,wave_order_population,integer,6483,1,83,1
+study_wave,start_year,integer,6483,1,98,2010
+study_wave,end_year,integer,5693,0.8781428351072035,95,2012
+study_wave,duration_years,integer,5693,0.8781428351072035,41,2
+study_wave,years_since_first_wave,integer,6483,1,69,0
+study_wave,gap_from_prior_wave_years,integer,5485,0.8460589233379608,27,0
+study_wave,n_data_sources,numeric,6483,1,7,4
+study_wave,has_questionnaires,logical,6483,1,2,TRUE
+study_wave,has_cognitive_measures,logical,6483,1,2,FALSE
+study_wave,has_physical_measures,logical,6483,1,2,TRUE
+study_wave,has_biological_samples,logical,6483,1,2,TRUE
+study_wave,has_administrative_databases,logical,6483,1,2,TRUE
+study_wave,has_other_sources,logical,6483,1,2,FALSE
+study_wave,n_biosamples,integer,6483,1,7,3
+study_wave,has_biosample_blood,logical,6483,1,2,TRUE
+study_wave,flag_planned_wave,logical,6483,1,2,FALSE
+study_domain,ellis_run_id,character,8190,1,1,ellis-20260728T021902
+study_domain,study_id,character,8190,1,455,3d
+study_domain,area_code,character,8190,1,18,Administrative_information
+study_domain,area_label,character,8190,1,18,Administrative information
+study_domain,has_area,logical,8190,1,2,FALSE
+study_domain,attribute_coverage_known,logical,8190,1,2,FALSE
+dementia_frame,ellis_run_id,character,155,1,1,ellis-20260728T021902
+dementia_frame,ferry_run_id,character,155,1,1,maelstrom-20260728T021329
+dementia_frame,study_id,character,155,1,155,3d
+dementia_frame,study_acronym,character,155,1,154,3D
+dementia_frame,study_name,character,155,1,155,"3D Study - Design, Develop, Discover"
+dementia_frame,study_page_url,character,155,1,155,https://www.maelstrom-research.org/study/3d
+dementia_frame,website_url,character,125,0.8064516129032258,109,https://www.irnpqeo.ca/en/
+dementia_frame,inventory_rank,integer,155,1,155,2
+dementia_frame,design_code,character,155,1,6,cohort_study
+dementia_frame,design_label,factor,155,1,6,Cohort study
+dementia_frame,study_start_year,integer,155,1,51,2010
+dementia_frame,published,logical,155,1,1,TRUE
+dementia_frame,marker_paper,character,144,0.9290322580645162,136,"William DF, Shapiro GD, Audibert F, Dubois …"
+dementia_frame,pubmed_id,character,125,0.8064516129032258,119,27781295
+dementia_frame,n_populations,integer,155,1,11,4
+dementia_frame,target_number,integer,150,0.967741935483871,143,8365
+dementia_frame,total_participants,integer,150,0.967741935483871,147,8365
+dementia_frame,total_samples,integer,107,0.6903225806451613,106,5700
+dementia_frame,n_waves,integer,155,1,44,105
+dementia_frame,max_population_waves,integer,155,1,24,34
+dementia_frame,first_wave_year,integer,155,1,52,2010
+dementia_frame,last_wave_year,integer,155,1,37,2029
+dementia_frame,follow_up_span_years,integer,155,1,46,19
+dementia_frame,mean_wave_gap_years,numeric,153,0.9870967741935484,90,0.584158415841584
+dementia_frame,n_planned_waves,integer,155,1,4,19
+dementia_frame,flag_longitudinal,logical,155,1,1,TRUE
+dementia_frame,flag_repeated_within_population,logical,155,1,2,TRUE
+dementia_frame,min_population_min_age,integer,135,0.8709677419354839,40,18
+dementia_frame,max_population_max_age,integer,80,0.5161290322580645,43,47
+dementia_frame,flag_older_adult_reach,logical,155,1,2,FALSE
+dementia_frame,n_countries,integer,155,1,6,1
+dementia_frame,primary_country,character,155,1,25,CAN
+dementia_frame,countries,character,155,1,31,CAN
+dementia_frame,flag_multinational,logical,155,1,2,FALSE
+dementia_frame,access_data,character,155,1,3,yes
+dementia_frame,access_biosamples,character,155,1,3,yes
+dementia_frame,access_other,character,153,0.9870967741935484,3,na
+dementia_frame,access_fees,logical,111,0.7161290322580646,2,TRUE
+dementia_frame,access_restrictions,logical,111,0.7161290322580646,2,TRUE
+dementia_frame,maelstrom_authorized,logical,155,1,2,FALSE
+dementia_frame,attribute_coverage_known,logical,155,1,2,FALSE
+dementia_frame,n_areas,integer,155,1,14,0
+dementia_frame,has_area_cognitive_psychological,logical,155,1,2,FALSE
+dementia_frame,has_area_diseases,logical,155,1,2,FALSE
+dementia_frame,has_area_health_status,logical,155,1,2,FALSE
+dementia_frame,n_events_cognitive,integer,155,1,30,27
+dementia_frame,prop_events_cognitive,numeric,155,1,58,0.257142857142857
+dementia_frame,has_source_cognitive_measures,logical,155,1,2,TRUE
+dementia_frame,has_source_questionnaires,logical,155,1,1,TRUE
+dementia_frame,has_source_physical_measures,logical,155,1,2,TRUE
+dementia_frame,has_source_biological_samples,logical,155,1,2,TRUE
+dementia_frame,has_source_administrative_databases,logical,155,1,2,TRUE
+dementia_frame,has_biosample_blood,logical,155,1,2,TRUE
+dementia_frame,n_dementia_hits,integer,155,1,33,0
+dementia_frame,n_cognition_hits,integer,155,1,59,50
+dementia_frame,n_brain_hits,integer,155,1,11,0
+dementia_frame,n_ageing_hits,integer,155,1,22,0
+dementia_frame,sig_text_dementia,logical,155,1,2,FALSE
+dementia_frame,sig_text_cognition,logical,155,1,2,TRUE
+dementia_frame,sig_text_brain,logical,155,1,2,FALSE
+dementia_frame,sig_text_ageing,logical,155,1,2,FALSE
+dementia_frame,sig_area_cognitive,logical,155,1,2,FALSE
+dementia_frame,sig_source_cognitive,logical,155,1,2,TRUE
+dementia_frame,relevance_score,numeric,155,1,7,4
+dementia_frame,relevance_tier,ordered/factor,155,1,2,probable
+dementia_frame,flag_topic_relevant,logical,155,1,1,TRUE
+dementia_frame,flag_cognitive_evidence,logical,155,1,1,TRUE
+dementia_frame,flag_in_frame,logical,155,1,1,TRUE
+dementia_frame,frame_exclusion_reason,character,0,0,0,NA

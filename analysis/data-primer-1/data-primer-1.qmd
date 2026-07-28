@@ -1,0 +1,468 @@
+---
+title: "Data Primer 1 — The Maelstrom Harmonization Analytic Store"
+subtitle: "Canonical description of the data as it emerges from `1-ellis-1.R`"
+author: "Report Composer (Composing Orchestra)"
+date: last-modified
+format:
+  html:
+    page-layout: full
+    toc: true
+    toc-location: right
+    toc-depth: 3
+    code-fold: show
+    theme: yeti
+    highlight-style: breeze
+    code-line-numbers: true
+    self-contained: true
+    embed-resources: true
+editor: visual
+editor_options:
+  chunk_output_type: console
+---
+
+# Purpose
+
+This is the **canonical data primer** for the project. It describes the nine objects produced by the Ellis lane `manipulation/1-ellis-1.R` — what each one is, what a single row of it means, how they join, what every column of the study spine holds, and where the metadata is thin.
+
+Every EDA and presentation Report in `analysis/` links here rather than re-explaining the data.
+
+The primer answers six questions:
+
+1.  What did this store come from — which Ellis run, which Ferry run, and when?
+2.  What objects exist, and does each hold the grain the manifest declares?
+3.  How do the objects join, and does any child row lack a parent?
+4.  What does the data look like for one study, followed down through all five layers?
+5.  What does every column of `study_profile` mean, and how completely is it populated?
+6.  What are the controlled vocabularies, and how did the funnel narrow 455 studies to 155?
+
+**House rule.** Prose is authored in `local-functions.R`; every number is computed from the parquet at render time. No count in this document was typed by hand, and `out4` fails loudly if the authored dictionary and the physical spine disagree.
+
+Companion documents:
+
+-   `data-public/metadata/CACHE-manifest.md` — the prose contract this primer renders as evidence
+-   `data-public/metadata/INPUT-manifest.md` — the Ferry staging database the lane consumes
+-   `manipulation/pipeline.md` — architecture diagram and execution guide
+-   `ai/project/glossary.md` — Ferry, Ellis, and CACHE terminology
+
+Following the dual-file development pattern, all analytical code lives in the companion `data-primer-1.R`. This document sources those chunks for presentation.
+
+```{r}
+#| code-summary: Reconciles working directory between execution modes
+#| echo: false
+#| results: hide
+#| message: false
+#| warning: false
+cat("Working directory: ", getwd())
+library(knitr)
+opts_knit$set(root.dir = '../../') # keep this chunk isolated
+```
+
+```{r}
+#| label: set_options
+#| code-summary: Report-wide formatting options
+#| echo: false
+#| results: hide
+#| message: false
+cat("Working directory: ", getwd())
+report_render_start_time <- Sys.time()
+opts_chunk$set(
+  results      = 'show',
+  message      = FALSE,
+  warning      = FALSE,
+  comment      = NA,
+  tidy         = FALSE,
+  out.width    = "960px",
+  fig.width    = 10,
+  fig.height   = 6,
+  fig.path     = 'figure-png-iso/'
+)
+echo_chunks    <- FALSE
+message_chunks <- FALSE
+options(width = 120)
+read_chunk("analysis/data-primer-1/data-primer-1.R")
+```
+
+# Environment
+
+> Reviews the components of the working environment. Non-technical readers may skip this section.
+
+```{r}
+#| label: load-packages
+#| code-summary: Packages used in the current report
+#| echo: true
+#| results: hide
+#| message: false
+#| code-fold: true
+```
+
+```{r}
+#| label: load-sources
+#| code-summary: Project-level functions and the visual identity palette
+#| echo: true
+#| results: hide
+#| message: false
+#| code-fold: true
+```
+
+```{r}
+#| label: declare-globals
+#| code-summary: Paths, object order, key paths, edges, and vocabularies
+#| echo: true
+#| results: hide
+#| message: false
+#| code-fold: true
+```
+
+```{r}
+#| label: declare-functions
+#| code-summary: Column dictionary and profiling helpers (local-functions.R)
+#| echo: true
+#| results: hide
+#| message: false
+#| code-fold: true
+```
+
+# Pipeline Architecture
+
+The Maelstrom public catalogue reaches `analysis/` through two lanes, each with a single job.
+
+```{mermaid}
+flowchart LR
+    A["Maelstrom catalogue API<br/>(public metadata)"]
+    B["Ferry lane<br/>manipulation/0-ferry-extract.R"]
+    C["Staging store<br/>maelstrom-catalog.sqlite"]
+    D["Ellis lane<br/>manipulation/1-ellis-1.R"]
+    E["Analytic store<br/>maelstrom-analytic.sqlite"]
+    F["Parquet mirrors<br/>data-private/derived/ellis/"]
+    G["Ontology profiles<br/>data-public/metadata/ellis-ontology/"]
+    H["analysis/<br/>EDAs and Reports"]
+
+    A --> B --> C --> D --> E
+    D --> F
+    D --> G
+    F --> H
+```
+
+**Ferry** transports catalogue metadata and refuses to interpret it. **Ellis** makes exactly one opinionated judgement — whether a study is relevant to dementia or cognitive decline — and writes the evidence for that judgement to `screening_evidence` so a reader can check it. Everything else the Ellis lane does is arithmetic over the Ferry tables.
+
+**Why this primer reads parquet, not SQLite.** SQLite has no boolean type. There, `flag_*`, `sig_*`, and `has_*` are 0/1 integers, and `design_label` and `relevance_tier` are plain text. The parquet mirrors carry real logicals and ordered factors, so they are the preferred surface for analysis in R. The two are written from the same rectangles in the same transaction.
+
+```{r}
+#| label: load-data
+#| code-summary: Read all nine Ellis parquet mirrors and the declared ontology
+#| code-fold: true
+```
+
+# Provenance
+
+Nothing below is an invariant. The public catalogue grows and the screening lexicon will be revised, so a later run will legitimately report different values. The run that produced the figures in this document is named here.
+
+```{r}
+#| label: out1
+#| code-summary: "Output out1: Provenance of the Ellis analytic store"
+#| echo: true
+#| eval: true
+```
+
+# What Objects Exist
+
+Nine objects in seven cognitive groups. `dementia_frame` is a **view**, not a table — `SELECT * FROM study_profile WHERE flag_in_frame = 1` — so it cannot drift from the spine it is drawn from.
+
+The `Rows (declared)` and `Cols (declared)` columns come from `data-public/metadata/ellis-ontology/cache-tables.csv`, the contract the lane published alongside the data. Rendering them beside what was actually read makes drift visible rather than assumed away.
+
+```{r}
+#| label: t1-data-prep
+#| code-summary: Join the declared contract to the observed rectangles
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t1
+#| code-summary: "Table t1: Object inventory"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t1: Object inventory — declared contract beside observed delivery"
+```
+
+# Grain
+
+A grain statement is a promise about what one row means. Here it is tested rather than asserted: for each object, the composite key path is extracted and the number of distinct key combinations is compared to the number of rows.
+
+```{r}
+#| label: out2
+#| code-summary: "Output out2: Grain proof for all nine objects"
+#| echo: true
+#| eval: true
+```
+
+::: callout-warning
+## Composite keys are mandatory
+
+`population_id` and `dce_id` are **sequence labels local to their parent**, not global identifiers. `population_id` takes only a few dozen distinct values across 998 population rows, and `dce_id` fewer than a hundred across 6,483 wave rows. A join on `population_id` alone will silently produce a Cartesian mess. Always carry the full key path shown in `out2`.
+:::
+
+# How the Objects Join
+
+```{mermaid}
+erDiagram
+    ellis_runs ||--o{ study_profile : "ellis_run_id"
+    ellis_runs ||--o{ concept_lexicon : "ellis_run_id"
+    ellis_runs ||--o{ screening_flow : "ellis_run_id"
+    concept_lexicon ||--o{ screening_evidence : "concept, term_label"
+    study_profile ||--o{ screening_evidence : "+ study_id"
+    study_profile ||--o{ study_domain : "+ study_id"
+    study_profile ||--o{ study_population : "+ study_id"
+    study_population ||--o{ study_wave : "+ population_id"
+    study_profile ||--|| dementia_frame : "subset"
+```
+
+```{r}
+#| label: t2-data-prep
+#| code-summary: Measure each declared edge against the delivered data
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t2
+#| code-summary: "Table t2: Observed relationships"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t2: Observed relationships between Ellis objects"
+```
+
+## out21 — Referential integrity
+
+```{r}
+#| label: out21
+#| code-summary: "Output out21: Orphan counts across the four declared edges"
+#| echo: true
+#| eval: true
+```
+
+# One Study, All Five Layers
+
+The fastest way to understand a relational store is to follow a single entity through it. Below, one in-frame study is selected deterministically — so the example is stable between renders — and shown at every level: its spine row, its populations, its waves, the research areas it declares, and the textual evidence that put it in the frame.
+
+Pin a different study by setting `PRIMER_EXAMPLE_STUDY_ID` in `declare-globals`.
+
+```{r}
+#| label: out3
+#| code-summary: "Output out3: One study across all five layers"
+#| echo: true
+#| eval: true
+```
+
+# The Study Spine
+
+`study_profile` is the spine: one row per study, 69 columns, and the validation target declared in `manipulation/pipeline-validation.dcf`. It is the object most analyses will start from, so it receives a full column reference.
+
+## out4 — Dictionary reconciliation
+
+The descriptions in `t3` are authored by hand in `local-functions.R`. Hand-written documentation drifts from the data it describes; this check makes that drift visible on every render.
+
+```{r}
+#| label: out4
+#| code-summary: "Output out4: Documented-but-absent and present-but-undocumented columns"
+#| echo: true
+#| eval: true
+```
+
+## t3 — Full variable reference
+
+Blocks follow the section order of `data-public/metadata/CACHE-manifest.md`, so the two documents can be read side by side. Descriptions are authored; type, fill, distinct count, and example are computed from the parquet.
+
+```{r}
+#| label: t3-data-prep
+#| code-summary: Join the authored dictionary to the computed column profile
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t3
+#| code-summary: "Table t3: study_profile variable reference"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t3: study_profile — every column, described and profiled"
+```
+
+### t31 — Columns that cannot be read at face value
+
+The short list below is the part of the reference most likely to prevent a wrong conclusion. Three warnings recur and are worth stating outside the table:
+
+-   **Absent metadata is never evidence.** Every `flag_*` derived from an optional source field is FALSE when the field is missing. FALSE therefore cannot be read as a substantive negative.
+-   **`flag_longitudinal` counts events, not repeated measurement of people.** Two populations measured once each satisfy it. Use `flag_repeated_within_population` when the same cohort must be measured twice.
+-   **`has_area_*` is meaningless without `attribute_coverage_known`.** Fewer than half the studies carry any `Mlstr_area` annotation; for the rest, 0 means "not annotated", not "not measured".
+
+```{r}
+#| label: t31
+#| code-summary: "Table t31: Spine columns carrying a reading warning"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t31: Spine columns that cannot be read at face value"
+```
+
+## g1 — Where the spine is thin
+
+Sparsity is a property of the *catalogue*, not of the lane. Studies do not always report a maximum age, a marker paper, or a sample count, and the lane carries the absence through rather than imputing it. The graph shows every incompletely populated column; the columns not drawn are fully populated.
+
+One entry is not a gap at all: `frame_exclusion_reason` is NA *exactly when* a study passed the funnel, so its fill rate is the complement of frame membership. It appears here because the graph reports emptiness without interpreting it.
+
+```{r}
+#| label: g1-data-prep
+#| code-summary: Isolate the incompletely populated spine columns
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: g1
+#| code-summary: "Graph g1: Where the study spine is thin"
+#| code-fold: true
+#| eval: true
+#| fig-width: 8.5
+#| fig-height: 7
+#| fig-cap: "Graph g1: Fill rate of every incompletely populated column of study_profile"
+```
+
+# The Companion Objects
+
+Spine-first: `study_profile` gets a full reference above; the eight companion objects get a completeness summary and, for the four analytic layers, a column-level listing.
+
+```{r}
+#| label: t4-data-prep
+#| code-summary: Profile every column of the eight companion objects
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t4
+#| code-summary: "Table t4: Companion object completeness"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t4: Companion objects — column completeness at a glance"
+```
+
+## t41 — Column reference for the analytic layers
+
+`ellis_runs`, `concept_lexicon`, and `screening_flow` are small enough to read whole in `out1`, `t5`, and `t6`. The four layers below are the ones an analysis will actually join against.
+
+```{r}
+#| label: t41
+#| code-summary: "Table t41: Column reference for the population, wave, coverage, and evidence layers"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t41: Column reference for the population, wave, coverage, and evidence layers"
+```
+
+# Controlled Vocabularies
+
+Factor levels are explicit in the parquet mirrors. The table below enumerates every distinct value each vocabulary column takes, with the number of rows carrying it, so a filter can be written without guessing at spelling.
+
+```{r}
+#| label: t5-data-prep
+#| code-summary: Count every distinct value of every vocabulary column
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t5
+#| code-summary: "Table t5: Controlled vocabularies"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t5: Controlled vocabularies of the Ellis store"
+```
+
+# The Screening Funnel
+
+The lane makes one opinionated judgement, and this is it. `relevance_score` is additive and per-signal — weight is per concept, not per hit, so a study that says "dementia" fourteen times is not four times more relevant than one that says it once:
+
+$$
+\text{relevance\_score} =
+3 \cdot \text{sig\_text\_dementia} +
+2 \cdot \text{sig\_text\_cognition} +
+1 \cdot \text{sig\_text\_brain} +
+2 \cdot \text{sig\_source\_cognitive} +
+1 \cdot \text{sig\_area\_cognitive}
+$$
+
+`sig_text_ageing` is deliberately absent from the formula. Studying older adults is not the same as studying cognition, so the signal is retained as description and excluded from the score.
+
+Each funnel step is applied to the survivors of the step before it. Studies excluded at any step remain in `study_profile` with `flag_in_frame = FALSE` and a populated `frame_exclusion_reason`, so a sensitivity analysis over a different frame definition needs no re-run.
+
+```{r}
+#| label: t6-data-prep
+#| code-summary: Read the delivered funnel and cross tier against frame membership
+#| code-fold: true
+#| eval: true
+```
+
+```{r}
+#| label: t6
+#| code-summary: "Table t6: The screening funnel"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t6: The screening funnel, as delivered by the Ellis lane"
+```
+
+## t61 — Tier against frame membership
+
+```{r}
+#| label: t61
+#| code-summary: "Table t61: Relevance tier against frame membership"
+#| code-fold: true
+#| eval: true
+#| tbl-cap: "Table t61: Relevance tier against analytic frame membership"
+```
+
+# Known Limitations
+
+These are properties of the method, not defects awaiting a silent fix. They are reproduced here from `data-public/metadata/CACHE-manifest.md` because an analyst reading this primer should not have to find them elsewhere.
+
+1.  **No negation handling.** "No evidence of cognitive impairment" scores identically to "incident cognitive impairment". `screening_evidence.first_snippet` exists so a human can catch this, and the evidence table is a readable volume.
+2.  **The lexicon is English-only.** Studies whose Maelstrom metadata is authored in another language and left untranslated will under-score.
+3.  **Metadata, not instruments.** `has_cognitive_measures` records that a study declared a cognitive instrument *family* at an event. It does not say which instrument, and two studies flagged alike may share nothing harmonizable.
+4.  **The frame is a screening result, not an eligibility decision.** The in-frame studies passed a deliberately permissive filter. Confirming any of them as harmonizable requires reading the study.
+5.  **Absent metadata never counts as evidence.** Every `flag_*` derived from an optional source field is FALSE when the field is missing, and FALSE cannot be read as a substantive negative.
+6.  **Birth cohorts sit inside the frame.** Life-course cohorts with childhood cognitive measurement are genuinely relevant to cognitive-decline research, but they answer a different question than an ageing cohort. Split on `flag_older_adult_reach` before pooling.
+
+# Usage Notes for Analysts
+
+-   Start from `dementia_frame.parquet` for the screened set, and from `study_profile.parquet` when the excluded studies and their reasons matter.
+-   Always join on the full composite key path; `population_id` and `dce_id` are local labels.
+-   Filter to the current `ellis_run_id` even though only one run is present, so the query survives a future multi-run archive.
+-   Prefer the parquet mirrors over SQLite in R: they carry logicals and ordered factors that SQLite cannot represent.
+-   `relevance_score` is reconstructible from the `sig_*` columns of the same row. If it is not, the row is corrupt — report it rather than working around it.
+-   Treat every figure in this document as dated. Re-run the lane and diff `cache-tables.csv` and `cache-screening-flow.csv` before assuming a prior number still holds.
+-   Maelstrom catalogue terms of use apply to any republication of study-level metadata.
+
+# Rebuild
+
+``` powershell
+Rscript ./manipulation/0-ferry-extract.R
+Rscript ./manipulation/1-ellis-1.R
+quarto render ./analysis/data-primer-1/data-primer-1.qmd
+```
+
+```{r}
+#| label: save-to-disk
+#| code-summary: Write the reference tables to data-local for diffing
+#| echo: true
+#| results: hide
+#| code-fold: true
+```
+
+# Session Information
+
+```{r}
+#| code-summary: Session info and render time
+#| echo: false
+cat("Report rendered in",
+    round(difftime(Sys.time(), report_render_start_time, units = "secs"), 1),
+    "seconds\n")
+sessionInfo()
+```

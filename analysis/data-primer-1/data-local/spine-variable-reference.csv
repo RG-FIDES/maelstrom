@@ -1,0 +1,70 @@
+block,ordinal_position,column_name,description,caution,r_type,n_non_null,fill_rate,n_distinct,example_value
+Identity and provenance,1,ellis_run_id,"Ellis run identifier, `ellis-{YYYYMMDD}T{HHMMSS}` in UTC",NA,character,455,1,1,ellis-20260728T021902
+Identity and provenance,2,ferry_run_id,Ferry run this store was built from,NA,character,455,1,1,maelstrom-20260728T021329
+Identity and provenance,3,study_id,Maelstrom slug; the study key everywhere in this store,NA,character,455,1,455,3d
+Identity and provenance,4,study_acronym,Short study name as the catalogue gives it,Not unique: a few acronyms are shared by two studies. Never key on it.,character,455,1,451,3D
+Identity and provenance,5,study_name,Full English study name,NA,character,455,1,455,"3D Study - Design, Develop, Discover"
+Identity and provenance,6,study_page_url,Public Maelstrom catalogue page for the study,NA,character,455,1,455,https://www.maelstrom-research.org/study/3d
+Identity and provenance,7,website_url,"The study's own website, where the catalogue records one",NA,character,346,0.7604395604395604,307,https://www.irnpqeo.ca/en/
+Identity and provenance,8,inventory_rank,Position in the name-sorted catalogue listing,NA,integer,455,1,455,2
+Design,9,design_code,Study design as the source taxonomy names it,NA,character,455,1,7,cohort_study
+Design,10,design_label,Readable design label; an ordered factor in the parquet mirror,NA,factor,455,1,7,Cohort study
+Design,11,study_start_year,"Year the study began, as declared",NA,integer,455,1,73,2010
+Design,12,published,Source publication flag,Constant: the inventory query returns published studies only.,logical,455,1,1,TRUE
+Design,13,marker_paper,Free-text citation of the study's marker paper,NA,character,311,0.6835164835164835,291,"William DF, Shapiro GD, Audibert F, Dubois …"
+Design,14,pubmed_id,PubMed identifier for the marker paper,NA,character,271,0.5956043956043956,255,27781295
+Enrolment scale,15,n_populations,Number of populations the study enrolled,NA,integer,455,1,13,4
+Enrolment scale,16,target_number,Study-level recruitment target declared by the source,NA,integer,380,0.8351648351648352,345,8365
+Enrolment scale,17,total_participants,Sum of participant counts across populations,"NA only when every population count is NA, never when some are.",integer,376,0.8263736263736263,352,8365
+Enrolment scale,18,total_samples,Sum of biosample counts across populations,NA,integer,258,0.567032967032967,233,5700
+Longitudinal depth,19,n_waves,Data collection events across all populations,NA,integer,455,1,66,105
+Longitudinal depth,20,max_population_waves,Largest wave count within a single population,NA,integer,455,1,38,34
+Longitudinal depth,21,first_wave_year,Earliest event start year in the study,NA,integer,455,1,73,2010
+Longitudinal depth,22,last_wave_year,Latest event start year in the study,"May be in the future: planned waves are carried, not censored.",integer,455,1,52,2029
+Longitudinal depth,23,follow_up_span_years,`last_wave_year - first_wave_year`,NA,integer,455,1,59,19
+Longitudinal depth,24,mean_wave_gap_years,Mean gap between consecutive waves within a population,NA,numeric,375,0.8241758241758241,165,0.584158415841584
+Longitudinal depth,25,n_planned_waves,Events whose start year is later than the current calendar year,NA,integer,455,1,7,19
+Longitudinal depth,26,flag_longitudinal,Two or more data collection events,"Counts events, not repeated measurement of the same people. Two populations measured once each satisfies it.",logical,455,1,2,TRUE
+Longitudinal depth,27,flag_repeated_within_population,At least one population measured twice or more,The stricter reading of longitudinal. Prefer it when repeated measurement of the same cohort matters.,logical,455,1,2,TRUE
+Age reach,28,min_population_min_age,Youngest stated minimum eligibility age across populations,NA,integer,317,0.6967032967032967,56,18
+Age reach,29,max_population_max_age,Oldest stated maximum eligibility age across populations,Sparsely reported; a missing value says nothing about who was enrolled.,integer,191,0.4197802197802198,59,47
+Age reach,30,flag_older_adult_reach,Any population with minimum age >= 50 or maximum age >= 65,"Claimed only from a stated boundary, never inferred. FALSE includes studies that simply did not report age.",logical,455,1,2,FALSE
+Geography,31,n_countries,Distinct ISO country codes across populations,NA,integer,455,1,10,1
+Geography,32,primary_country,Most frequent population country; ties resolved by first appearance,At study level this is the modal country. At population level the same name means the FIRST country listed.,character,455,1,32,CAN
+Geography,33,countries,Pipe-delimited sorted ISO country codes,NA,character,455,1,45,CAN
+Geography,34,flag_multinational,Study spans more than one country,NA,logical,455,1,2,FALSE
+Access terms,35,access_data,Whether the catalogue records a data access channel,NA,character,451,0.9912087912087912,3,yes
+Access terms,36,access_biosamples,Whether the catalogue records a biosample access channel,NA,character,448,0.9846153846153847,3,yes
+Access terms,37,access_other,Whether the catalogue records another access channel,NA,character,436,0.9582417582417583,3,na
+Access terms,38,access_fees,"Source flag for access fees, carried unchanged",NA,logical,390,0.8571428571428571,2,TRUE
+Access terms,39,access_restrictions,"Source flag for access restrictions, carried unchanged",NA,logical,390,0.8571428571428571,2,TRUE
+Access terms,40,maelstrom_authorized,"Source flag for Maelstrom authorization, carried unchanged",NA,logical,455,1,2,FALSE
+Declared research-area coverage,41,attribute_coverage_known,Study carries at least one `Mlstr_area` annotation,"Read every `has_area_*` column through this one. Without it, 0 is ambiguous.",logical,455,1,2,FALSE
+Declared research-area coverage,42,n_areas,Count of declared Maelstrom research areas,NA,integer,455,1,18,0
+Declared research-area coverage,43,has_area_cognitive_psychological,Declares the `Cognitive_psychological_measures` area,0 means 'not annotated' for studies where attribute_coverage_known is FALSE.,logical,455,1,2,FALSE
+Declared research-area coverage,44,has_area_diseases,Declares the `Diseases` area,0 means 'not annotated' for studies where attribute_coverage_known is FALSE.,logical,455,1,2,FALSE
+Declared research-area coverage,45,has_area_health_status,Declares the `Health_status_functional_limitations` area,0 means 'not annotated' for studies where attribute_coverage_known is FALSE.,logical,455,1,2,FALSE
+Measurement sources across waves,46,n_events_cognitive,Events declaring `cognitive_measures`,NA,integer,455,1,30,27
+Measurement sources across waves,47,prop_events_cognitive,`n_events_cognitive / n_waves`,NA,numeric,455,1,62,0.257142857142857
+Measurement sources across waves,48,has_source_cognitive_measures,Any event declares `cognitive_measures` — the key harmonization signal,"Records that an instrument FAMILY was declared, not which instrument. Two flagged studies may share nothing harmonizable.",logical,455,1,2,TRUE
+Measurement sources across waves,49,has_source_questionnaires,Any event declares `questionnaires`,NA,logical,455,1,2,TRUE
+Measurement sources across waves,50,has_source_physical_measures,Any event declares `physical_measures`,NA,logical,455,1,2,TRUE
+Measurement sources across waves,51,has_source_biological_samples,Any event declares `biological_samples`,NA,logical,455,1,2,TRUE
+Measurement sources across waves,52,has_source_administrative_databases,Any event declares `administratives_databases` (the source spelling),NA,logical,455,1,2,TRUE
+Measurement sources across waves,53,has_biosample_blood,Blood was collected at any event,NA,logical,455,1,2,TRUE
+Screening signals,54,n_dementia_hits,Total `dementia` lexicon matches across all scanned fields,NA,integer,455,1,33,0
+Screening signals,55,n_cognition_hits,Total `cognition` lexicon matches across all scanned fields,NA,integer,455,1,59,50
+Screening signals,56,n_brain_hits,Total `brain` lexicon matches across all scanned fields,NA,integer,455,1,12,0
+Screening signals,57,n_ageing_hits,Total `ageing` lexicon matches across all scanned fields,NA,integer,455,1,24,0
+Screening signals,58,sig_text_dementia,At least one `dementia` hit; contributes weight 3 to the score,NA,logical,455,1,2,FALSE
+Screening signals,59,sig_text_cognition,At least one `cognition` hit; contributes weight 2,NA,logical,455,1,2,TRUE
+Screening signals,60,sig_text_brain,At least one `brain` hit; contributes weight 1,NA,logical,455,1,2,FALSE
+Screening signals,61,sig_text_ageing,At least one `ageing` hit; descriptive only,Deliberately absent from the score. Studying older adults is not the same as studying cognition.,logical,455,1,2,FALSE
+Screening signals,62,sig_area_cognitive,Alias of `has_area_cognitive_psychological`; contributes weight 1,NA,logical,455,1,2,FALSE
+Screening signals,63,sig_source_cognitive,Alias of `has_source_cognitive_measures`; contributes weight 2,NA,logical,455,1,2,TRUE
+Relevance and frame membership,64,relevance_score,Additive score over the six weighted signals,"Reconstructible from the sig_* columns of the same row. If it is not, the row is corrupt.",numeric,455,1,10,4
+Relevance and frame membership,65,relevance_tier,Ordered tier: unrelated < possible < probable < core,NA,ordered/factor,455,1,4,probable
+Relevance and frame membership,66,flag_topic_relevant,Tier is `probable` or `core`; step 1 of the screening funnel,NA,logical,455,1,2,TRUE
+Relevance and frame membership,67,flag_cognitive_evidence,`sig_source_cognitive` or `sig_text_dementia`; step 3 of the funnel,NA,logical,455,1,2,TRUE
+Relevance and frame membership,68,flag_in_frame,All three funnel criteria hold; defines the `dementia_frame` view,"A screening result, not an eligibility decision. Confirming a study as harmonizable requires reading it.",logical,455,1,2,TRUE
+Relevance and frame membership,69,frame_exclusion_reason,First failing funnel criterion,"NA exactly when flag_in_frame is TRUE. An NA here is a pass, not a gap.",character,300,0.6593406593406593,3,Relevance tier below 'probable'
