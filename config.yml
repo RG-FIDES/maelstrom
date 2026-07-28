@@ -21,6 +21,8 @@ default:
       staging: "./data-public/derived/database/staging-database.sqlite"
       # Add connection string if using external database:
       # connection_string: "sqlite:///path/to/your/database.sqlite"
+    maelstrom_catalog:
+      staging: "./data-private/derived/maelstrom/maelstrom-catalog.sqlite"
 
   # Basic project configuration
   directories:

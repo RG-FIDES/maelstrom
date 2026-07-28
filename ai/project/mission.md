@@ -1,32 +1,38 @@
-# Project Mission (Template)
+# Project Mission
 
-Provide a clear, concise articulation of the project's purpose, target users, and intended analytical impact.
+Build a reproducible evidence base for identifying and investigating harmonization
+opportunities across individual studies in the Maelstrom Research catalogue.
 
 ## Objectives
 
-- Establish a reusable scaffold for data analysis workflows.
-- Demonstrate AI-assisted context, persona, and memory integration.
-- Support rapid onboarding with minimal friction.
-- Maintain separation between portable logic and project-specific storage.
+- Acquire the complete public metadata record for every individual Maelstrom study.
+- Preserve source payloads and provenance while creating queryable relational structures.
+- Characterize overlap in study design, populations, geography, data collection events,
+  data sources, biosamples, and annotated information domains.
+- Develop transparent, auditable methods for prioritizing study pairs or groups for
+  deeper variable-level harmonization assessment.
+- Distinguish metadata-supported opportunity from demonstrated variable compatibility.
 
 ## Success Metrics
 
-- Time-to-first-successful analysis < 30 minutes.
-- Persona activation yields relevant guidance without manual edits.
-- Memory system captures decisions within normal workflow (<= 3 commands).
-- Context refresh operations complete < 2 seconds for core files.
+- All individual studies declared by the public catalogue are represented in the local
+  database with one preserved detail payload per study.
+- Pipeline runs are deterministic, documented, and independently reproducible.
+- Study-level screening criteria and harmonization scores are traceable to source fields.
+- Candidate study groupings can be reproduced with versioned SQL or R code.
+- Variable-level conclusions explicitly report missing metadata and uncertainty.
 
 ## Non-Goals
 
-- Domain-specific modeling guidance.
-- Heavy dependency management beyond base R/Python tooling.
-- Automated cloud deployment.
+- Claiming harmonizability from study-level metadata alone.
+- Redistributing restricted participant-level data or non-public study assets.
+- Replacing study-owner review, data-access procedures, or substantive domain expertise.
+- Automatically treating absent metadata as evidence that a study lacks a feature.
 
 ## Stakeholders
 
-- Data analysts: need reproducible templates.
-- Research engineers: need portable AI scaffolding.
-- Project managers: need visibility into mission/method/glossary.
-
----
-*Populate with project-specific mission statements before production use.*
+- Harmonization researchers: need systematic study discovery and comparison.
+- Data scientists and epidemiologists: need reproducible candidate-selection evidence.
+- Study investigators and data custodians: need accurate representation of study assets.
+- Research planners: need defensible estimates of where deeper harmonization work is likely
+  to be productive.
